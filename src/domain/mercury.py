@@ -84,10 +84,11 @@ class Mercury230Decoder:
         c_p3 = Mercury230Decoder._parse_value_3byte_swap23(data[51:54]) / 1000.0
 
         # 54-65: Power Factors (3 bytes each)
-        pf_sum = Mercury230Decoder._parse_value_3byte_swap23(data[54:57]) / 1000.0
-        pf_p1 = Mercury230Decoder._parse_value_3byte_swap23(data[57:60]) / 1000.0
-        pf_p2 = Mercury230Decoder._parse_value_3byte_swap23(data[60:63]) / 1000.0
-        pf_p3 = Mercury230Decoder._parse_value_3byte_swap23(data[63:66]) / 1000.0
+        # Игнорируем первый байт (флаги/статус), берем значение из 2 и 3 байта
+        pf_sum = Mercury230Decoder._parse_power_factor_3byte(data[54:57])
+        pf_p1 = Mercury230Decoder._parse_power_factor_3byte(data[57:60])
+        pf_p2 = Mercury230Decoder._parse_power_factor_3byte(data[60:63])
+        pf_p3 = Mercury230Decoder._parse_power_factor_3byte(data[63:66])
 
         # 66-71: Distortion (2 bytes each)
         d_p1 = Mercury230Decoder._parse_value_2byte_swap(data[66:68]) / 100.0
@@ -119,6 +120,16 @@ class Mercury230Decoder:
             energy_active_fwd=en_a_fwd, energy_active_rev=en_a_rev,
             energy_reactive_fwd=en_r_fwd, energy_reactive_rev=en_r_rev
         )
+
+    @staticmethod
+    def _parse_power_factor_3byte(b: List[int]) -> float:
+        # Структура для Коэффициента Мощности аналогична Мощности (3 байта):
+        # Байт 0: Флаги / Статус (игнорируем, так как это вызывает значения > 4000)
+        # Байт 1, 2: Значение (swapped)
+        # Value = (b[2] << 8) | b[1]
+        # Масштаб: / 1000.0 (для получения 0.xxx - 1.000)
+        val = (b[2] << 8) | b[1]
+        return val / 1000.0
 
     @staticmethod
     def _parse_power_3byte(b: List[int]) -> float:

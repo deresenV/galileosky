@@ -1,0 +1,53 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: mercury_parser
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: mercury_parser
+      __path__: /var/log/parsed_data.jsonl
+  pipeline_stages:
+  - json:
+      expressions:
+        timestamp: _received_at
+        mercury_id: mercury_id
+        imei: imei
+        galileosky_mercury_state: galileosky_mercury_state
+        galileosky_mercury_f: galileosky_mercury_f
+        galileosky_mercury_u1: galileosky_mercury_u1
+        galileosky_mercury_u2: galileosky_mercury_u2
+        galileosky_mercury_u3: galileosky_mercury_u3
+        galileosky_mercury_i1: galileosky_mercury_i1
+        galileosky_mercury_i2: galileosky_mercury_i2
+        galileosky_mercury_i3: galileosky_mercury_i3
+        galileosky_mercury_a12: galileosky_mercury_a12
+        galileosky_mercury_a23: galileosky_mercury_a23
+        galileosky_mercury_a13: galileosky_mercury_a13
+        galileosky_mercury_p1: galileosky_mercury_p1
+        galileosky_mercury_p2: galileosky_mercury_p2
+        galileosky_mercury_p3: galileosky_mercury_p3
+        galileosky_mercury_ps: galileosky_mercury_ps
+        galileosky_mercury_pa_plus: galileosky_mercury_pa_plus
+        galileosky_mercury_ks1: galileosky_mercury_ks1
+        galileosky_mercury_ks2: galileosky_mercury_ks2
+        galileosky_mercury_ks3: galileosky_mercury_ks3
+        galileosky_mercury_kss: galileosky_mercury_kss
+        galileosky_mercury_kg1: galileosky_mercury_kg1
+        galileosky_mercury_kg2: galileosky_mercury_kg2
+        galileosky_mercury_kg3: galileosky_mercury_kg3
+  - labels:
+      mercury_id:
+      imei:
+  - timestamp:
+      source: timestamp
+      format: RFC3339
