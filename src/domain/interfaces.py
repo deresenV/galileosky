@@ -1,16 +1,15 @@
 from abc import ABC, abstractmethod
+from typing import Dict, Any
 
-class IFileReader(ABC):
+class IStorage(ABC):
     """
-    Интерфейс для чтения файлов.
+    Интерфейс для сохранения распарсенных данных.
     """
-
+    
     @abstractmethod
-    def read(self, path: str) -> str:
+    async def save(self, packet_data: Dict[str, Any]):
         """
-        Читает содержимое файла.
-
-        :param path: Путь к файлу.
-        :return: Содержимое файла в виде строки.
+        Сохраняет данные пакета.
+        :param packet_data: Словарь с данными пакета.
         """
         pass
