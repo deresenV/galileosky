@@ -57,5 +57,17 @@ services:
       timeout: 5s
       retries: 5
 
+  listener:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "12347:12347"
+    volumes:
+      - ../parsed_data.jsonl:/app/parsed_data.jsonl
+    networks:
+      - loki
+    restart: unless-stopped
+
 volumes:
   grafana-storage:
