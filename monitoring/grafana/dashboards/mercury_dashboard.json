@@ -22,12 +22,112 @@
   "links": [],
   "panels": [
     {
+      "datasource": {
+        "type": "loki",
+        "uid": "Loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 40,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "Loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "avg by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap enter1 | __error__=`` [5m]))",
+          "legendFormat": "Фаза A",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Ticks",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 38,
       "panels": [],
@@ -85,7 +185,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 1
+        "y": 9
       },
       "id": 4,
       "options": {
@@ -108,6 +208,7 @@
       "pluginVersion": "12.3.2",
       "targets": [
         {
+          "direction": "backward",
           "editorMode": "code",
           "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_state | __error__=\"\" [5m]))",
           "legendFormat": "__auto",
@@ -145,7 +246,7 @@
         "h": 3,
         "w": 2,
         "x": 6,
-        "y": 1
+        "y": 9
       },
       "id": 28,
       "options": {
@@ -205,7 +306,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 1
+        "y": 9
       },
       "id": 21,
       "options": {
@@ -230,7 +331,7 @@
         {
           "direction": "backward",
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i1 | __error__=\"\" [5m])) * 100",
+          "expr": "min by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i1 | __error__=\"\" [1m])) * 100",
           "legendFormat": "__auto",
           "queryType": "instant",
           "refId": "A"
@@ -266,7 +367,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 1
+        "y": 9
       },
       "id": 18,
       "options": {
@@ -327,7 +428,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 4
+        "y": 12
       },
       "id": 15,
       "options": {
@@ -387,7 +488,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 4
+        "y": 12
       },
       "id": 22,
       "options": {
@@ -412,7 +513,7 @@
         {
           "direction": "backward",
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i2 | __error__=\"\" [5m])) * 100",
+          "expr": "min by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i2 | __error__=\"\" [1m])) * 100",
           "legendFormat": "__auto",
           "queryType": "instant",
           "refId": "A"
@@ -448,7 +549,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 4
+        "y": 12
       },
       "id": 19,
       "options": {
@@ -509,7 +610,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 7
+        "y": 15
       },
       "id": 24,
       "options": {
@@ -569,7 +670,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 7
+        "y": 15
       },
       "id": 23,
       "options": {
@@ -594,7 +695,7 @@
         {
           "direction": "backward",
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i3 | __error__=\"\" [5m])) * 100",
+          "expr": "min by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i3 | __error__=\"\" [1m])) * 100",
           "legendFormat": "__auto",
           "queryType": "instant",
           "refId": "A"
@@ -630,7 +731,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 7
+        "y": 15
       },
       "id": 20,
       "options": {
@@ -692,7 +793,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 10
+        "y": 18
       },
       "id": 11,
       "options": {
@@ -715,8 +816,9 @@
       "pluginVersion": "12.3.2",
       "targets": [
         {
+          "direction": "backward",
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ps | __error__=\"\" [5m]))",
+          "expr": "min by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ps | __error__=\"\" [1m]))",
           "legendFormat": "__auto",
           "queryType": "instant",
           "refId": "A"
@@ -752,7 +854,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 10
+        "y": 18
       },
       "id": 16,
       "options": {
@@ -812,7 +914,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 10
+        "y": 18
       },
       "id": 17,
       "options": {
@@ -872,7 +974,7 @@
         "h": 3,
         "w": 3,
         "x": 0,
-        "y": 13
+        "y": 21
       },
       "id": 25,
       "options": {
@@ -895,6 +997,7 @@
       "pluginVersion": "12.3.2",
       "targets": [
         {
+          "direction": "backward",
           "editorMode": "code",
           "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ks1 | __error__=\"\" [5m]))",
           "legendFormat": "__auto",
@@ -932,7 +1035,7 @@
         "h": 3,
         "w": 3,
         "x": 3,
-        "y": 13
+        "y": 21
       },
       "id": 26,
       "options": {
@@ -992,7 +1095,7 @@
         "h": 3,
         "w": 3,
         "x": 6,
-        "y": 13
+        "y": 21
       },
       "id": 27,
       "options": {
@@ -1015,6 +1118,7 @@
       "pluginVersion": "12.3.2",
       "targets": [
         {
+          "direction": "backward",
           "editorMode": "code",
           "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ks3 | __error__=\"\" [5m]))",
           "legendFormat": "__auto",
@@ -1052,7 +1156,7 @@
         "h": 3,
         "w": 3,
         "x": 15,
-        "y": 13
+        "y": 21
       },
       "id": 29,
       "options": {
@@ -1112,7 +1216,7 @@
         "h": 3,
         "w": 3,
         "x": 18,
-        "y": 13
+        "y": 21
       },
       "id": 30,
       "options": {
@@ -1172,7 +1276,7 @@
         "h": 3,
         "w": 3,
         "x": 21,
-        "y": 13
+        "y": 21
       },
       "id": 31,
       "options": {
@@ -1233,7 +1337,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 32,
       "options": {
@@ -1272,7 +1376,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 27
       },
       "id": 37,
       "panels": [],
@@ -1306,7 +1410,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -1344,7 +1448,7 @@
         "h": 15,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 28
       },
       "id": 2,
       "options": {
@@ -1438,7 +1542,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -1477,7 +1581,7 @@
         "h": 13,
         "w": 24,
         "x": 0,
-        "y": 35
+        "y": 43
       },
       "id": 39,
       "options": {
@@ -1487,7 +1591,7 @@
             "max",
             "min"
           ],
-          "displayMode": "table",
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1504,6 +1608,7 @@
             "type": "loki",
             "uid": "Loki"
           },
+          "direction": "backward",
           "editorMode": "code",
           "expr": "max by (mercury_id, imei) (avg_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ps | __error__=\"\" [$__interval]))",
           "legendFormat": "galileosky_mercury_ps",
@@ -1556,5 +1661,5 @@
   "timezone": "browser",
   "title": "Mercury 230 Dashboard (Loki)",
   "uid": "mercury-230-loki",
-  "version": 3
+  "version": 1
 }

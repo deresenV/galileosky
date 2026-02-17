@@ -20,6 +20,8 @@ class Tags:
     x41 = Tag(num_byte=0x41, tag="0x41", length=2, description="Напряжение питания (мВ)")
     x42 = Tag(num_byte=0x42, tag="0x42", length=2, description="Напряжение АКБ (мВ)")
     x43 = Tag(num_byte=0x43, tag="0x43", length=1, description="Температура терминала (°C)")
+    x45 = Tag(num_byte=0x45, tag="0x45", length=2, description="Состояние выхода")
+    x46 = Tag(num_byte=0x46, tag="0x46", length=2, description="Сработка на соответсвующем типе")
     x48 = Tag(num_byte=0x48, tag="0x48", length=2, description="Расширенный статус")
     x49 = Tag(num_byte=0x49, tag="0x49", length=1, description="Канал передачи")
     x50 = Tag(num_byte=0x50, tag="0x50", length=2, description="Вход 0 (мВ)")
@@ -38,7 +40,7 @@ class Tags:
     # Словарь для поиска по байту
     ALL_TAGS: ClassVar[Dict[int, Tag]] = {
         0x10: x10, 0x20: x20, 0x21: x21, 0x30: x30, 0x33: x33, 0x34: x34, 0x35: x35,
-        0x40: x40, 0x41: x41, 0x42: x42, 0x43: x43, 0x48: x48, 0x49: x49,
+        0x40: x40, 0x41: x41, 0x42: x42, 0x43: x43, 0x45: x45, 0x46: x46, 0x48: x48, 0x49: x49,
         0x50: x50, 0x51: x51, 0x52: x52, 0x53: x53, 0x54: x54, 0x55: x55,
         0xEA: xEA, 0xFE: xFE, 0xD4: xD4, 0x63: x63
     }
