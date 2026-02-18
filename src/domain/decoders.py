@@ -44,6 +44,8 @@ class TagDecoder:
                 return TagDecoder._decode_uint8(byte_data)
             elif tag_num in range(0x50, 0x56):  # Входы 0-5
                 return TagDecoder._decode_uint16(byte_data)
+            elif tag_num in (0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77):  # Термометры
+                return TagDecoder._decode_thermometer(byte_data)
             elif tag_num == 0xD4:  # Пробег
                 return TagDecoder._decode_uint32(byte_data)
             elif tag_num == 0xEA: # Массив пользователя (Меркурий 230?)
@@ -112,4 +114,28 @@ class TagDecoder:
         return {
             "speed_kmh": speed_raw / 10.0,
             "direction_deg": dir_raw / 10.0
+        }
+
+    @staticmethod
+    def _decode_thermometer(data: bytes) -> Dict[str, Union[int, str, None]]:
+        if len(data) != 2:
+            return {"error": "Invalid length for thermometer"}
+        
+        # Байт 0: ID (unsigned)
+        thermometer_id = data[0]
+        # Байт 1: Температура (signed)
+        temperature_raw = struct.unpack('<b', data[1:2])[0]
+        
+        # Проверка на обрыв: ID=127 и Temp=-128
+        if thermometer_id == 127 and temperature_raw == -128:
+            return {
+                "id": thermometer_id, 
+                "temperature": None, 
+                "status": "break"
+            }
+            
+        return {
+            "id": thermometer_id, 
+            "temperature": temperature_raw, 
+            "status": "ok"
         }

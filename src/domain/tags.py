@@ -36,13 +36,22 @@ class Tags:
     xFE = Tag(num_byte=0xFE, tag="0xFE", length=2, description="Расширенные теги (длина данных указана в следующих байтах)")
     xD4 = Tag(num_byte=0xD4, tag="0xD4", length=4, description="Общий пробег по GPS (м)")
     x63 = Tag(num_byte=0x63, tag="0x63", length=3, description="RS485[3] (ДУТ адрес 3)")
+    x70 = Tag(num_byte=0x70, tag="0x70", length=2, description="Идентификатор термометра 0 и измеренная температура, °C")
+    x71 = Tag(num_byte=0x71, tag="0x71", length=2, description="Идентификатор термометра 1 и измеренная температура, °C")
+    x72 = Tag(num_byte=0x71, tag="0x72", length=2, description="Идентификатор термометра 2 и измеренная температура, °C")
+    x73 = Tag(num_byte=0x71, tag="0x73", length=2, description="Идентификатор термометра 3 и измеренная температура, °C")
+    x74 = Tag(num_byte=0x71, tag="0x74", length=2, description="Идентификатор термометра 4 и измеренная температура, °C")
+    x75 = Tag(num_byte=0x71, tag="0x75", length=2, description="Идентификатор термометра 5 и измеренная температура, °C")
+    x76 = Tag(num_byte=0x71, tag="0x75", length=2, description="Идентификатор термометра 5 и измеренная температура, °C")
+    x77 = Tag(num_byte=0x71, tag="0x75", length=2, description="Идентификатор термометра 5 и измеренная температура, °C")
 
     # Словарь для поиска по байту
     ALL_TAGS: ClassVar[Dict[int, Tag]] = {
         0x10: x10, 0x20: x20, 0x21: x21, 0x30: x30, 0x33: x33, 0x34: x34, 0x35: x35,
         0x40: x40, 0x41: x41, 0x42: x42, 0x43: x43, 0x45: x45, 0x46: x46, 0x48: x48, 0x49: x49,
         0x50: x50, 0x51: x51, 0x52: x52, 0x53: x53, 0x54: x54, 0x55: x55,
-        0xEA: xEA, 0xFE: xFE, 0xD4: xD4, 0x63: x63
+        0xEA: xEA, 0xFE: xFE, 0xD4: xD4, 0x63: x63,
+        0x70: x70, 0x71: x71, 0x72: x72, 0x73: x73, 0x74: x74, 0x75:x75, 0x76: x76, 0x77: x77
     }
 
     @classmethod

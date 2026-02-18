@@ -22,22 +22,31 @@ def normalize_power_factor(value: float) -> float:
     return value
 
 
-def format_mercury_data(mercury_data: Mercury230Data, received_at: str, enters) -> Dict[str, Any]:
+def format_mercury_data(mercury_data: Mercury230Data, received_at: str, enters, temps) -> Dict[str, Any]:
     """
     Форматирует объект данных счетчика Меркурий 230 в структурированный словарь,
     совместимый с метриками дашборда (плоская структура для удобства парсинга в Loki).
     Значения сохраняются в естественных единицах (В, А, Вт, Гц), без дополнительных множителей.
     """
     return {
-        "0x45": enters["0x45"],
-        "0x46": enters["0x46"],
         "enter0": int(enters["enter0"]),
         "enter1": int(enters["enter1"]),
         "enter2": int(enters["enter2"]),
         "enter3": int(enters["enter3"]),
+
+        #Температура
+        "galileosky_temp0": temps["temp1"],
+        "galileosky_temp1": temps["temp2"],
+        "galileosky_temp2": temps["temp3"],
+        "galileosky_temp3": temps["temp4"],
+        "galileosky_temp4": temps["temp5"],
+        "galileosky_temp5": temps["temp6"],
+        "galileosky_temp6": temps["temp7"],
+        "galileosky_temp7": temps["temp8"],
+
         "_received_at": received_at,
-        "mercury_id": str(mercury_data.address),  # addr для дашборда
-        "imei": "869531073980322", # Placeholder, так как дашборд требует imei
+        "mercury_id": str(mercury_data.address),
+        "imei": "869531073980322",
         
         # Статусы
         "galileosky_mercury_state": mercury_data.status,
@@ -115,6 +124,16 @@ class JsonFileStorage(IStorage):
                     "0x45": tags.get("0x45", 0),
                     "0x46": tags.get("0x46", 0),
                 }
+                temps = {
+                    "temp1": tags.get("0x70", 255),
+                    "temp2": tags.get("0x71", 255),
+                    "temp3": tags.get("0x72", 255),
+                    "temp4": tags.get("0x73", 255),
+                    "temp5": tags.get("0x74", 255),
+                    "temp6": tags.get("0x75", 255),
+                    "temp7": tags.get("0x76", 255),
+                    "temp8": tags.get("0x77", 255)
+                }
                 # Проверяем, что это объект Mercury230Data
                 if not isinstance(mercury_obj, Mercury230Data):
                     # Если вдруг пришла строка или байты, попробуем залогировать как ошибку или пропустить
@@ -123,7 +142,7 @@ class JsonFileStorage(IStorage):
                 received_at = datetime.now().isoformat()
                 
                 # Форматирование данных
-                formatted_data = format_mercury_data(mercury_obj, received_at, enters_data)
+                formatted_data = format_mercury_data(mercury_obj, received_at, enters_data, temps)
                 
                 # Добавляем IMEI, если он есть в пакете (в будущем)
                 # formatted_data["imei"] = packet_data.get("imei", "unknown")
