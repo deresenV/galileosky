@@ -43,37 +43,13 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "index": 0,
-                  "text": "канал открыт"
-                },
-                "1": {
-                  "color": "orange",
-                  "index": 1,
-                  "text": "ошибка связи"
-                },
-                "2": {
-                  "color": "red",
-                  "index": 2,
-                  "text": "CRC Error"
-                }
-              },
-              "type": "value"
-            }
-          ],
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -82,129 +58,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
+        "w": 4,
         "x": 0,
-        "y": 1
-      },
-      "id": 4,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "direction": "backward",
-          "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_state | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
-          "refId": "A"
-        }
-      ],
-      "title": "Статус электросчетчика",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "Loki"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 6,
-        "y": 1
-      },
-      "id": 28,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_f | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
-          "refId": "A"
-        }
-      ],
-      "title": "Частота сети",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "Loki"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 8,
         "y": 1
       },
       "id": 21,
@@ -236,7 +91,7 @@
           "refId": "A"
         }
       ],
-      "title": "Фаза A, (А)",
+      "title": "Сила тока фаза A, (А)",
       "type": "stat"
     },
     {
@@ -264,130 +119,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
-        "x": 16,
+        "w": 4,
+        "x": 4,
         "y": 1
-      },
-      "id": 18,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "direction": "backward",
-          "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (\n  last_over_time(\n    {job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} \n    | json \n    | unwrap galileosky_mercury_u1 \n    | __error__=\"\" \n    [$__range]\n  )\n)",
-          "legendFormat": "__auto",
-          "queryType": "instant",
-          "refId": "A"
-        }
-      ],
-      "title": "Фаза A, (V)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "Loki"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 0,
-        "y": 4
-      },
-      "id": 15,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_a12 | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
-          "refId": "A"
-        }
-      ],
-      "title": "Текущий угол между гармониками фаз A-B, градусы",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "Loki"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 8,
-        "y": 4
       },
       "id": 22,
       "options": {
@@ -418,7 +152,7 @@
           "refId": "A"
         }
       ],
-      "title": "Фаза B, (А)",
+      "title": "Сила тока фаза B, (А)",
       "type": "stat"
     },
     {
@@ -446,130 +180,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
-        "x": 16,
-        "y": 4
-      },
-      "id": 19,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "direction": "backward",
-          "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (\n  last_over_time(\n    {job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} \n    | json \n    | unwrap galileosky_mercury_u2 \n    | __error__=\"\" \n    [$__range]\n  )\n)",
-          "legendFormat": "__auto",
-          "queryType": "instant",
-          "refId": "A"
-        }
-      ],
-      "title": "Фаза B, (V)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "Loki"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 0,
-        "y": 7
-      },
-      "id": 24,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_kss | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
-          "refId": "A"
-        }
-      ],
-      "title": "Cуммарный коэффициент мощности",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "Loki"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
+        "w": 4,
         "x": 8,
-        "y": 7
+        "y": 1
       },
       "id": 23,
       "options": {
@@ -600,68 +213,7 @@
           "refId": "A"
         }
       ],
-      "title": "Фаза C, (А)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "Loki"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 16,
-        "y": 7
-      },
-      "id": 20,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "direction": "backward",
-          "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (\n  last_over_time(\n    {job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} \n    | json \n    | unwrap galileosky_mercury_u3\n    | __error__=\"\" \n    [$__range]\n  )\n)",
-          "legendFormat": "__auto",
-          "queryType": "instant",
-          "refId": "A"
-        }
-      ],
-      "title": "Фаза C, (V)",
+      "title": "Сила тока фаза C, (А)",
       "type": "stat"
     },
     {
@@ -690,9 +242,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
-        "x": 0,
-        "y": 10
+        "w": 6,
+        "x": 12,
+        "y": 1
       },
       "id": 11,
       "options": {
@@ -723,7 +275,7 @@
           "refId": "A"
         }
       ],
-      "title": "Суммарное значение потребляемой активной энергии, кВт/ч",
+      "title": "Потребляемой активной энергии, кВт/ч",
       "type": "stat"
     },
     {
@@ -736,6 +288,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "decimals": 3,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -751,11 +304,11 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
-        "x": 8,
-        "y": 10
+        "w": 5,
+        "x": 18,
+        "y": 1
       },
-      "id": 16,
+      "id": 32,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -777,13 +330,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_a23 | __error__=\"\" [5m]))",
+          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_pa_plus | __error__=\"\" [5m]))",
           "legendFormat": "__auto",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "title": "Текущий угол между гармониками фаз B-C, градусы",
+      "title": "Показания счётчика, кВт*ч",
       "type": "stat"
     },
     {
@@ -811,11 +364,11 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
-        "x": 16,
-        "y": 10
+        "w": 1,
+        "x": 23,
+        "y": 1
       },
-      "id": 17,
+      "id": 28,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -837,13 +390,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_a13 | __error__=\"\" [5m]))",
+          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_f | __error__=\"\" [5m]))",
           "legendFormat": "__auto",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "title": "Текущий угол между гармониками фаз A-C, градусы",
+      "title": "Hz",
       "type": "stat"
     },
     {
@@ -854,7 +407,39 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -863,6 +448,10 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           }
@@ -870,10 +459,463 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
-        "w": 3,
+        "h": 16,
+        "w": 12,
         "x": 0,
-        "y": 13
+        "y": 4
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "Loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max by (mercury_id, imei) (avg_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i1 | __error__=\"\" [$__interval])) * 100",
+          "legendFormat": "Фаза A",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "Loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max by (mercury_id, imei) (avg_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i2 | __error__=\"\" [$__interval])) * 100",
+          "hide": false,
+          "legendFormat": "Фаза B",
+          "queryType": "range",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "Loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max by (mercury_id, imei) (avg_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i3 | __error__=\"\" [$__interval])) * 100",
+          "hide": false,
+          "legendFormat": "Фаза C",
+          "queryType": "range",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Сила тока, А;B;C",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "Loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "galileosky_mercury_ps"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Контейнер №1"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 39,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "max",
+            "min"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "Loki"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max by (mercury_id, imei) (avg_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ps | __error__=\"\" [$__interval]))",
+          "legendFormat": "galileosky_mercury_ps",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Потребление, кВт/ч",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "Loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 20
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max by (mercury_id, imei) (\n  last_over_time(\n    {job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} \n    | json \n    | unwrap galileosky_mercury_u1 \n    | __error__=\"\" \n    [$__range]\n  )\n)",
+          "legendFormat": "__auto",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Напряжение фаза A, (V)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "Loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 4,
+        "y": 20
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max by (mercury_id, imei) (\n  last_over_time(\n    {job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} \n    | json \n    | unwrap galileosky_mercury_u2 \n    | __error__=\"\" \n    [$__range]\n  )\n)",
+          "legendFormat": "__auto",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Напряжение фаза B, (V)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "Loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 8,
+        "y": 20
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max by (mercury_id, imei) (\n  last_over_time(\n    {job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} \n    | json \n    | unwrap galileosky_mercury_u3\n    | __error__=\"\" \n    [$__range]\n  )\n)",
+          "legendFormat": "__auto",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Напряжение фаза C, (V)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "Loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 12,
+        "y": 20
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_a12 | __error__=\"\" [5m]))",
+          "legendFormat": "__auto",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Угол м/у гармониками фаз A-B",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "Loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 23
       },
       "id": 25,
       "options": {
@@ -904,7 +946,7 @@
           "refId": "A"
         }
       ],
-      "title": "Фаза A: Коэффициент мощности",
+      "title": "cos φ фаза A",
       "type": "stat"
     },
     {
@@ -932,9 +974,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 3,
-        "x": 3,
-        "y": 13
+        "w": 4,
+        "x": 4,
+        "y": 23
       },
       "id": 26,
       "options": {
@@ -964,7 +1006,7 @@
           "refId": "A"
         }
       ],
-      "title": "Фаза B: Коэффициент мощности",
+      "title": "cos φ фаза B",
       "type": "stat"
     },
     {
@@ -992,9 +1034,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 3,
-        "x": 6,
-        "y": 13
+        "w": 4,
+        "x": 8,
+        "y": 23
       },
       "id": 27,
       "options": {
@@ -1025,7 +1067,7 @@
           "refId": "A"
         }
       ],
-      "title": "Фаза C: Коэффициент мощности",
+      "title": "cos φ фаза C",
       "type": "stat"
     },
     {
@@ -1053,9 +1095,69 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 3,
-        "x": 15,
-        "y": 13
+        "w": 5,
+        "x": 12,
+        "y": 23
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_a13 | __error__=\"\" [5m]))",
+          "legendFormat": "__auto",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Угол м/у гармониками фаз A-C",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "Loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 26
       },
       "id": 29,
       "options": {
@@ -1085,7 +1187,7 @@
           "refId": "A"
         }
       ],
-      "title": "Фаза A: Коэффициент искажения синусоидальности фазных напряжений",
+      "title": "sin фаза A",
       "type": "stat"
     },
     {
@@ -1113,9 +1215,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 3,
-        "x": 18,
-        "y": 13
+        "w": 4,
+        "x": 4,
+        "y": 26
       },
       "id": 30,
       "options": {
@@ -1145,7 +1247,7 @@
           "refId": "A"
         }
       ],
-      "title": "Фаза B: Коэффициент искажения синусоидальности фазных напряжений",
+      "title": "sin фаза B",
       "type": "stat"
     },
     {
@@ -1173,9 +1275,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 3,
-        "x": 21,
-        "y": 13
+        "w": 4,
+        "x": 8,
+        "y": 26
       },
       "id": 31,
       "options": {
@@ -1205,7 +1307,7 @@
           "refId": "A"
         }
       ],
-      "title": "Фаза C: Коэффициент искажения синусоидальности фазных напряжений",
+      "title": "sin фаза C",
       "type": "stat"
     },
     {
@@ -1218,7 +1320,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "decimals": 3,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -1234,11 +1335,11 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 24,
-        "x": 0,
-        "y": 16
+        "w": 5,
+        "x": 12,
+        "y": 26
       },
-      "id": 32,
+      "id": 16,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -1260,373 +1361,125 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_pa_plus | __error__=\"\" [5m]))",
+          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_a23 | __error__=\"\" [5m]))",
           "legendFormat": "__auto",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "title": "Активная прямая энергия, учтенная электросчетчиком с момента сброса, кВт*ч",
+      "title": "Угол м/у гармониками фаз B-C",
       "type": "stat"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 29
       },
-      "id": 42,
-      "panels": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "Loki"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "smooth",
-                "lineWidth": 1,
-                "pointSize": 1,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "normal"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 24,
-            "x": 0,
-            "y": 2
-          },
-          "id": 40,
-          "options": {
-            "legend": {
-              "calcs": [
-                "last",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.3.2",
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "Loki"
-              },
-              "direction": "backward",
-              "editorMode": "code",
-              "expr": "avg by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap enter1 | __error__=`` [5m]))",
-              "legendFormat": "Фаза A",
-              "queryType": "range",
-              "range": true,
-              "refId": "A"
-            }
-          ],
-          "title": "Ticks",
-          "type": "timeseries"
-        }
-      ],
-      "title": "Тики",
+      "id": 37,
+      "panels": [],
+      "title": "Графики",
       "type": "row"
     },
     {
-      "collapsed": true,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 20
+      "datasource": {
+        "type": "loki",
+        "uid": "Loki"
       },
-      "id": 37,
-      "panels": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "Loki"
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
           },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "smooth",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
               }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 15,
-            "w": 24,
-            "x": 0,
-            "y": 3
-          },
-          "id": 2,
-          "options": {
-            "legend": {
-              "calcs": [
-                "last",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.3.2",
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "Loki"
-              },
-              "direction": "backward",
-              "editorMode": "code",
-              "expr": "max by (mercury_id, imei) (avg_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i1 | __error__=\"\" [$__interval])) * 100",
-              "legendFormat": "Фаза A",
-              "queryType": "range",
-              "range": true,
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "Loki"
-              },
-              "direction": "backward",
-              "editorMode": "code",
-              "expr": "max by (mercury_id, imei) (avg_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i2 | __error__=\"\" [$__interval])) * 100",
-              "hide": false,
-              "legendFormat": "Фаза B",
-              "queryType": "range",
-              "range": true,
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "Loki"
-              },
-              "direction": "backward",
-              "editorMode": "code",
-              "expr": "max by (mercury_id, imei) (avg_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_i3 | __error__=\"\" [$__interval])) * 100",
-              "hide": false,
-              "legendFormat": "Фаза C",
-              "queryType": "range",
-              "range": true,
-              "refId": "C"
-            }
-          ],
-          "title": "Текущее потребление тока, А",
-          "type": "timeseries"
+            ]
+          }
         },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 0,
+        "y": 30
+      },
+      "id": 40,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "Loki"
           },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "smooth",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "decimals": 2,
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 13,
-            "w": 24,
-            "x": 0,
-            "y": 18
-          },
-          "id": 39,
-          "options": {
-            "legend": {
-              "calcs": [
-                "last",
-                "max",
-                "min"
-              ],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.3.2",
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "Loki"
-              },
-              "direction": "backward",
-              "editorMode": "code",
-              "expr": "max by (mercury_id, imei) (avg_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ps | __error__=\"\" [$__interval]))",
-              "legendFormat": "galileosky_mercury_ps",
-              "queryType": "range",
-              "range": true,
-              "refId": "A"
-            }
-          ],
-          "title": "Суммарное значение потребляемой активной энергии, кВт/ч",
-          "type": "timeseries"
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "avg by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap enter1 | __error__=`` [5m]))",
+          "legendFormat": "Фаза A",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "title": "Графики электрика",
-      "type": "row"
+      "title": "2й импульсный вход",
+      "type": "timeseries"
     },
     {
       "collapsed": true,
@@ -1973,7 +1826,7 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
