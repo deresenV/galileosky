@@ -6,25 +6,9 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 from src.domain.interfaces import IStorage
 from src.domain.mercury import Mercury230Data
-
-
-def normalize_energy(value: float) -> Optional[float]:
-    """Обработка специальных значений (0xFFFFFFFF / 1000 = 4294967.295 — признак отсутствия данных)"""
-    # return None if abs(value - 4294967.295) < 0.001 else value
-
-    return value
-
-def normalize_power_factor(value: float) -> float:
-    """Коррекция коэффициента мощности (ошибка масштабирования)"""
-    # if value > 1.0 and abs(value - 4195.3) < 0.1:
-    #     return round(value / 4096, 3)
-    # return min(round(value, 3), 1.0) if isinstance(value, (int, float)) else 1.0
-    return value
-
-
 def format_mercury_data(mercury_data: Mercury230Data, received_at: str, enters, temps) -> Dict[str, Any]:
     """
-    Форматирует объект данных счетчика Меркурий 230 в структурированный словарь,
+    Форматирует объект данных в структурированный словарь,
     совместимый с метриками дашборда (плоская структура для удобства парсинга в Loki).
     Значения сохраняются в естественных единицах (В, А, Вт, Гц), без дополнительных множителей.
     """
@@ -105,7 +89,6 @@ class JsonFileStorage(IStorage):
     async def save(self, packet_data: Dict[str, Any]):
         tags = packet_data.get("tags", {})
 
-        # Обработка только тега 0xEA (данные счетчика Меркурий)
         if "0xEA" in tags:
             try:
                 mercury_obj = tags["0xEA"]
@@ -125,16 +108,15 @@ class JsonFileStorage(IStorage):
                     "0x46": tags.get("0x46", 0),
                 }
                 temps = {
-                    "temp1": tags.get("0x70", 255),
-                    "temp2": tags.get("0x71", 255),
-                    "temp3": tags.get("0x72", 255),
-                    "temp4": tags.get("0x73", 255),
-                    "temp5": tags.get("0x74", 255),
-                    "temp6": tags.get("0x75", 255),
-                    "temp7": tags.get("0x76", 255),
-                    "temp8": tags.get("0x77", 255)
+                    "temp1": tags.get("0x70", 0),
+                    "temp2": tags.get("0x71", 0),
+                    "temp3": tags.get("0x72", 0),
+                    "temp4": tags.get("0x73", 0),
+                    "temp5": tags.get("0x74", 0),
+                    "temp6": tags.get("0x75", 0),
+                    "temp7": tags.get("0x76", 0),
+                    "temp8": tags.get("0x77", 0)
                 }
-                # Проверяем, что это объект Mercury230Data
                 if not isinstance(mercury_obj, Mercury230Data):
                     # Если вдруг пришла строка или байты, попробуем залогировать как ошибку или пропустить
                     raise ValueError(f"Expected Mercury230Data, got {type(mercury_obj)}")
@@ -143,9 +125,7 @@ class JsonFileStorage(IStorage):
                 
                 # Форматирование данных
                 formatted_data = format_mercury_data(mercury_obj, received_at, enters_data, temps)
-                
-                # Добавляем IMEI, если он есть в пакете (в будущем)
-                # formatted_data["imei"] = packet_data.get("imei", "unknown")
+
 
                 # Сохранение в файл (JSON Lines)
                 json_line = json.dumps(formatted_data, ensure_ascii=False)
@@ -153,7 +133,6 @@ class JsonFileStorage(IStorage):
                     await f.write(json_line + "\n")
 
             except Exception as e:
-                # Логирование ошибки
                 error_data = {
                     "_received_at": datetime.now().isoformat(),
                     "error": str(e),
