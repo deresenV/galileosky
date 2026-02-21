@@ -138,24 +138,26 @@ class JsonFileStorage(IStorage):
 
                 # Обновление метрик Prometheus
                 try:
-                    # Принудительно конвертируем в float перед передачей в метрики
-                    # Для температуры - отдельная логика
+                    # Создаем копию, чтобы не менять оригинальные данные для JSON
                     metrics_data = formatted_data.copy()
                     
                     # Проходим по всем полям, которые идут в Gauge и убеждаемся что это числа
                     for k, v in metrics_data.items():
                         if k.startswith("galileosky_") or k.startswith("enter"):
                             try:
-                                if v is not None:
+                                if v is None or v == "":
+                                    metrics_data[k] = 0.0
+                                else:
                                     metrics_data[k] = float(v)
                             except (ValueError, TypeError):
-                                pass
+                                metrics_data[k] = 0.0
 
                     metrics.update(
-                        imei=metrics_data["imei"],
-                        mercury_id=metrics_data["mercury_id"],
+                        imei=str(metrics_data["imei"]),
+                        mercury_id=str(metrics_data["mercury_id"]),
                         data=metrics_data
                     )
+                    
                 except Exception as e:
                     # Логируем ошибку, но не прерываем сохранение
                     print(f"Error updating metrics: {e}")
