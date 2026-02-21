@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'galileosky_listener'
+    static_configs:
+      - targets: ['listener:8000']

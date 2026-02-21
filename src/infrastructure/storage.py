@@ -6,6 +6,8 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 from src.domain.interfaces import IStorage
 from src.domain.mercury import Mercury230Data
+from src.infrastructure.metrics import metrics
+
 def format_mercury_data(mercury_data: Mercury230Data, received_at: str, enters, temps) -> Dict[str, Any]:
     """
     Форматирует объект данных в структурированный словарь,
@@ -126,6 +128,16 @@ class JsonFileStorage(IStorage):
                 # Форматирование данных
                 formatted_data = format_mercury_data(mercury_obj, received_at, enters_data, temps)
 
+                # Обновление метрик Prometheus
+                try:
+                    metrics.update(
+                        imei=formatted_data["imei"],
+                        mercury_id=formatted_data["mercury_id"],
+                        data=formatted_data
+                    )
+                except Exception as e:
+                    # Логируем ошибку, но не прерываем сохранение
+                    print(f"Error updating metrics: {e}")
 
                 # Сохранение в файл (JSON Lines)
                 json_line = json.dumps(formatted_data, ensure_ascii=False)
