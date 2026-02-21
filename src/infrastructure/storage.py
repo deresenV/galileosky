@@ -119,6 +119,14 @@ class JsonFileStorage(IStorage):
                     "temp7": tags.get("0x76", 0),
                     "temp8": tags.get("0x77", 0)
                 }
+                
+                # Обработка значений температур: извлекаем температуру из словаря, если это словарь
+                for key, val in temps.items():
+                    if isinstance(val, dict) and "temperature" in val:
+                        temps[key] = val["temperature"] if val["temperature"] is not None else 0
+                    elif isinstance(val, dict) and "error" in val:
+                         temps[key] = 0
+                
                 if not isinstance(mercury_obj, Mercury230Data):
                     # Если вдруг пришла строка или байты, попробуем залогировать как ошибку или пропустить
                     raise ValueError(f"Expected Mercury230Data, got {type(mercury_obj)}")
@@ -130,10 +138,23 @@ class JsonFileStorage(IStorage):
 
                 # Обновление метрик Prometheus
                 try:
+                    # Принудительно конвертируем в float перед передачей в метрики
+                    # Для температуры - отдельная логика
+                    metrics_data = formatted_data.copy()
+                    
+                    # Проходим по всем полям, которые идут в Gauge и убеждаемся что это числа
+                    for k, v in metrics_data.items():
+                        if k.startswith("galileosky_") or k.startswith("enter"):
+                            try:
+                                if v is not None:
+                                    metrics_data[k] = float(v)
+                            except (ValueError, TypeError):
+                                pass
+
                     metrics.update(
-                        imei=formatted_data["imei"],
-                        mercury_id=formatted_data["mercury_id"],
-                        data=formatted_data
+                        imei=metrics_data["imei"],
+                        mercury_id=metrics_data["mercury_id"],
+                        data=metrics_data
                     )
                 except Exception as e:
                     # Логируем ошибку, но не прерываем сохранение
