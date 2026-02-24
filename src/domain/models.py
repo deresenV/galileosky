@@ -20,4 +20,4 @@ class ParsedPacket:
     Модель данных распарсенного пакета.
     """
     tags: List[ParsedTag]
-    skipped_bytes: List[int] # Байты, которые не удалось распознать как теги (например, заголовок)
+    skipped_bytes: List[int] # Байты, которые не удалось распознать как теги

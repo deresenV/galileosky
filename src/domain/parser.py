@@ -24,13 +24,10 @@ class TagParser:
             
             if tag:
                 try:
-                    # Попытка распарсить тег
                     parsed_tag, new_index = self._process_tag(tag, data, index)
                     parsed_tags.append(parsed_tag)
                     index = new_index
                 except (IndexError, ValueError):
-                    # Если данных не хватает или структура некорректна
-                    # Добавляем текущий байт в пропущенные и пробуем следующий
                     skipped_bytes.append(byte)
                     index += 1
             else:
@@ -64,22 +61,19 @@ class TagParser:
             
         elif tag.num == 0xFE:
             # Расширенные теги. По описанию: "длина данных указана в следующих байтах".
-            # Обычно это 2 байта длины (Little Endian).
             if current_index + 1 >= len(data):
                 raise IndexError("Unexpected end of data for tag 0xFE length")
-            
-            # Читаем 2 байта длины (Little Endian)
+
             l_low = data[current_index]
             l_high = data[current_index + 1]
             data_length = l_low + (l_high << 8)
             
-            current_index += 2 # Пропускаем 2 байта длины
+            current_index += 2
             
         else:
             # Обычный тег с фиксированной длиной
             data_length = tag.length
 
-        # Проверка, хватает ли данных
         if current_index + data_length > len(data):
              raise IndexError(f"Not enough data for tag {tag.tag_hex_str}. Expected {data_length}, got {len(data) - current_index}")
 

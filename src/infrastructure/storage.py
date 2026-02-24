@@ -64,7 +64,7 @@ def format_mercury_data(mercury_data: Mercury230Data, received_at: str, enters, 
         float(mercury_data.current_p2)*float(mercury_data.voltage_p2)*float(mercury_data.power_factor_p2)+
         float(mercury_data.current_p3)*float(mercury_data.voltage_p3)*float(mercury_data.power_factor_p3))*300/1000,
 
-        # Энергия (Active Forward) - для графиков накопленной энергии
+        # Энергия (Active Forward)
         "galileosky_mercury_pa_plus": mercury_data.energy_active_fwd,
         
         # Коэффициенты мощности (KS1, KS2, KS3, KSS)
@@ -95,7 +95,7 @@ class JsonFileStorage(IStorage):
             try:
                 mercury_obj = tags["0xEA"]
                 
-                # Безопасное получение значений входов (с дефолтным значением 0, если тег отсутствует)
+
                 enter0 = tags.get("0x50", 0)
                 enter1 = tags.get("0x51", 0)
                 enter2 = tags.get("0x52", 0)
@@ -128,7 +128,6 @@ class JsonFileStorage(IStorage):
                          temps[key] = 0
                 
                 if not isinstance(mercury_obj, Mercury230Data):
-                    # Если вдруг пришла строка или байты, попробуем залогировать как ошибку или пропустить
                     raise ValueError(f"Expected Mercury230Data, got {type(mercury_obj)}")
 
                 received_at = datetime.now().isoformat()
@@ -136,10 +135,7 @@ class JsonFileStorage(IStorage):
                 # Форматирование данных
                 formatted_data = format_mercury_data(mercury_obj, received_at, enters_data, temps)
 
-                # Обновление метрик Prometheus
                 try:
-                    # Принудительно конвертируем в float перед передачей в метрики
-                    # Для температуры - отдельная логика
                     metrics_data = formatted_data.copy()
                     
                     # Проходим по всем полям, которые идут в Gauge и убеждаемся что это числа
@@ -157,7 +153,6 @@ class JsonFileStorage(IStorage):
                         data=metrics_data
                     )
                 except Exception as e:
-                    # Логируем ошибку, но не прерываем сохранение
                     print(f"Error updating metrics: {e}")
 
                 # Сохранение в файл (JSON Lines)

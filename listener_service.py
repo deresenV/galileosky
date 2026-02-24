@@ -18,7 +18,6 @@ async def main():
     """
     Точка входа для запуска сервиса слушателя.
     """
-    # Запуск сервера метрик Prometheus
     try:
         start_http_server(8000)
         logging.info("Prometheus metrics server started on port 8000")

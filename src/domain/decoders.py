@@ -126,7 +126,7 @@ class TagDecoder:
         # Байт 1: Температура (signed)
         temperature_raw = struct.unpack('<b', data[1:2])[0]
         
-        # Проверка на обрыв: ID=127 и Temp=-128
+        # Проверка на обрыв
         if thermometer_id == 127 and temperature_raw == -128:
             return {
                 "id": thermometer_id, 
