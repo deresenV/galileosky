@@ -43,6 +43,7 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -69,6 +70,9 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
     depends_on:
       loki:
         condition: service_healthy
@@ -93,5 +97,21 @@ services:
       - loki
     restart: unless-stopped
 
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:v1.99.0
+    container_name: victoriametrics
+    ports:
+      - "8428:8428"
+    volumes:
+      - vmdata:/storage
+    command:
+      - "-storageDataPath=/storage"
+      - "-retentionPeriod=1y"
+    networks:
+      - loki
+    restart: unless-stopped
+
 volumes:
   grafana-storage:
+  prometheus-data:
+  vmdata:

@@ -7,6 +7,8 @@ from src.domain.decoders import TagDecoder
 from src.domain.models import ParsedPacket
 from src.config import config
 from src.infrastructure.storage import JsonFileStorage
+import aiofiles
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +23,7 @@ class GalileoskyListenerAdapter:
         self.port = port
         self.server: Optional[asyncio.AbstractServer] = None
         self.storage = JsonFileStorage() # Инициализация хранилища
+        self.raw_log_path = "raw_data.log" # Файл для сырых данных
 
     async def start(self):
         """Запуск TCP сервера."""
@@ -30,6 +33,7 @@ class GalileoskyListenerAdapter:
         addr = self.server.sockets[0].getsockname()
         logger.info(f"Galileosky Listener started on {addr}")
         logger.info(f"Data will be saved to {self.storage.file_path}")
+        logger.info(f"Raw data will be logged to {self.raw_log_path}")
         
         async with self.server:
             await self.server.serve_forever()
@@ -72,6 +76,18 @@ class GalileoskyListenerAdapter:
                         
                     # Извлечение пакета
                     packet_data = buffer[:expected_len]
+                    
+                    # Логирование сырых данных
+                    try:
+                        hex_data = packet_data.hex().upper()
+                        timestamp = datetime.now().isoformat()
+                        log_entry = f"{timestamp} | {addr[0]}:{addr[1]} | {hex_data}\n"
+                        
+                        async with aiofiles.open(self.raw_log_path, mode='a') as f:
+                            await f.write(log_entry)
+                    except Exception as e:
+                        logger.error(f"Failed to log raw data: {e}")
+
                     # Данные тегов (без заголовка, длины и CRC)
                     tags_data = packet_data[3:-2] 
                     buffer = buffer[expected_len:]
@@ -121,8 +137,8 @@ class GalileoskyListenerAdapter:
                 tag_key = tag.tag.tag_hex_str # e.g. "0x10"
                 packet_dict["tags"][tag_key] = decoded_value
                 
-                if config.DEBUG:
-                    logger.debug(f"  Tag {tag.tag.tag_hex_str}: {decoded_value}")
+                # if config.DEBUG:
+                #     logger.debug(f"  Tag {tag.tag.tag_hex_str}: {decoded_value}")
 
             except Exception as e:
                 logger.error(f"Failed to decode tag {tag.tag.tag_hex_str}: {e}")
