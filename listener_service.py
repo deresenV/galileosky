@@ -16,7 +16,7 @@ logging.basicConfig(
 
 async def main():
     """
-    Точка входа для запуска сервиса слушателя.
+    Точка входа для запуска сервиса слушателя
     """
     try:
         start_http_server(8000)
