@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
   "links": [],
   "panels": [
     {
@@ -641,7 +640,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 2,
             "scaleDistribution": {
@@ -657,6 +656,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -994,12 +994,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"0\"}"
+              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"3\"}"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Термометр 0"
+                "value": "Температура Трансформатора"
               }
             ]
           }
@@ -1036,7 +1036,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "galileosky_temperature{sensor_id=\"0\"}",
+          "expr": "galileosky_temperature{sensor_id=\"3\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1111,12 +1111,36 @@
           {
             "matcher": {
               "id": "byName",
+              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"0\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Фаза А"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
               "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"1\"}"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Термометр 1"
+                "value": "Фаза С"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"2\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Фаза Б"
               }
             ]
           }
@@ -1153,7 +1177,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "galileosky_temperature{sensor_id=\"1\"}",
+          "expr": "galileosky_temperature{sensor_id=~\"1|0|2\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1460,7 +1484,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           }
@@ -1519,7 +1544,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           }
@@ -1578,7 +1604,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           }
@@ -1637,7 +1664,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           }
@@ -1696,7 +1724,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           }
@@ -1755,7 +1784,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           }
@@ -1798,269 +1828,6 @@
       ],
       "title": "sin фаза C",
       "type": "stat"
-    },
-    {
-      "collapsed": true,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 30
-      },
-      "id": 38,
-      "panels": [],
-      "title": "Общие данные",
-      "type": "row"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 31
-      },
-      "id": 43,
-      "panels": [],
-      "title": "Температура",
-      "type": "row"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 32
-      },
-      "id": 37,
-      "panels": [],
-      "title": "Графики",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "axisSoftMax": 80,
-            "axisSoftMin": -20,
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
-            "pointSize": 2,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"0\"}"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Термометр 0"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"1\"}"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Термометр 1"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"2\"}"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Термометр 2"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"3\"}"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Термометр 3"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"4\"}"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Термометр 4"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"5\"}"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Термометр 5"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"6\"}"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Термометр 6"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"7\"}"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Термометр 7"
-              }
-            ]
-          },
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "Термометр 0",
-                  "Термометр 1"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 22,
-        "w": 24,
-        "x": 0,
-        "y": 33
-      },
-      "id": 61,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "galileosky_temperature{imei=\"$imei\"}",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A",
-          "useBackend": false
-        }
-      ],
-      "title": "Температура",
-      "type": "timeseries"
     }
   ],
   "refresh": "30s",
@@ -2121,13 +1888,13 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Дашборд",
   "uid": "mercury-230-loki1",
-  "version": 13,
+  "version": 1,
   "weekStart": ""
 }
