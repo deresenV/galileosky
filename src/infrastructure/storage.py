@@ -120,7 +120,6 @@ class JsonFileStorage(IStorage):
                     "temp8": tags.get("0x77", 0)
                 }
                 
-                # Обработка значений температур: извлекаем температуру из словаря, если это словарь
                 for key, val in temps.items():
                     if isinstance(val, dict) and "temperature" in val:
                         temps[key] = val["temperature"] if val["temperature"] is not None else 0
@@ -132,13 +131,11 @@ class JsonFileStorage(IStorage):
 
                 received_at = datetime.now().isoformat()
                 
-                # Форматирование данных
                 formatted_data = format_mercury_data(mercury_obj, received_at, enters_data, temps)
 
                 try:
                     metrics_data = formatted_data.copy()
                     
-                    # Проходим по всем полям, которые идут в Gauge и убеждаемся что это числа
                     for k, v in metrics_data.items():
                         if k.startswith("galileosky_") or k.startswith("enter"):
                             try:
@@ -153,9 +150,8 @@ class JsonFileStorage(IStorage):
                         data=metrics_data
                     )
                 except Exception as e:
-                    print(f"Error updating metrics: {e}")
+                    pass
 
-                # Сохранение в файл (JSON Lines)
                 json_line = json.dumps(formatted_data, ensure_ascii=False)
                 async with aiofiles.open(self.file_path, mode='a', encoding='utf-8') as f:
                     await f.write(json_line + "\n")
@@ -170,3 +166,13 @@ class JsonFileStorage(IStorage):
                 async with aiofiles.open(self.file_path.replace('.jsonl', '_errors.jsonl'),
                                          mode='a', encoding='utf-8') as f:
                     await f.write(json_line + "\n")
+        else:
+            other_data = {
+                "_received_at": datetime.now().isoformat(),
+                "source_ip": packet_data.get("source_ip"),
+                "source_port": packet_data.get("source_port"),
+                "tags": {k: str(v) for k, v in tags.items()}
+            }
+            json_line = json.dumps(other_data, ensure_ascii=False)
+            async with aiofiles.open(self.file_path.replace('.jsonl', '_other.jsonl'), mode='a', encoding='utf-8') as f:
+                await f.write(json_line + "\n")
