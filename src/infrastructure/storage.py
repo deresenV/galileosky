@@ -1,5 +1,6 @@
 import json
 from math import sqrt
+import logging
 
 import aiofiles
 from datetime import datetime
@@ -7,6 +8,8 @@ from typing import Dict, Any, Optional
 from src.domain.interfaces import IStorage
 from src.domain.mercury import Mercury230Data
 from src.infrastructure.metrics import metrics
+
+logger = logging.getLogger(__name__)
 
 def format_mercury_data(mercury_data: Mercury230Data, received_at: str, enters, temps) -> Dict[str, Any]:
     """
@@ -90,8 +93,10 @@ class JsonFileStorage(IStorage):
 
     async def save(self, packet_data: Dict[str, Any]):
         tags = packet_data.get("tags", {})
+        logger.info(f"Storage save called. Parsed tags: {list(tags.keys())}")
 
         if "0xEA" in tags:
+            logger.info("Found 0xEA tag, processing as Mercury data")
             try:
                 mercury_obj = tags["0xEA"]
                 
@@ -150,23 +155,27 @@ class JsonFileStorage(IStorage):
                         data=metrics_data
                     )
                 except Exception as e:
-                    pass
+                    logger.warning(f"Error updating metrics: {e}")
 
                 json_line = json.dumps(formatted_data, ensure_ascii=False)
                 async with aiofiles.open(self.file_path, mode='a', encoding='utf-8') as f:
                     await f.write(json_line + "\n")
+                logger.info(f"Successfully saved Mercury data to {self.file_path}")
 
             except Exception as e:
+                logger.error(f"Error processing Mercury data: {e}", exc_info=True)
                 error_data = {
                     "_received_at": datetime.now().isoformat(),
                     "error": str(e),
                     "raw_data": str(tags.get("0xEA"))
                 }
                 json_line = json.dumps(error_data, ensure_ascii=False)
-                async with aiofiles.open(self.file_path.replace('.jsonl', '_errors.jsonl'),
-                                         mode='a', encoding='utf-8') as f:
+                error_path = self.file_path.replace('.jsonl', '_errors.jsonl')
+                async with aiofiles.open(error_path, mode='a', encoding='utf-8') as f:
                     await f.write(json_line + "\n")
+                logger.info(f"Saved error data to {error_path}")
         else:
+            logger.info("No 0xEA tag found, saving to other.jsonl")
             other_data = {
                 "_received_at": datetime.now().isoformat(),
                 "source_ip": packet_data.get("source_ip"),
@@ -174,5 +183,7 @@ class JsonFileStorage(IStorage):
                 "tags": {k: str(v) for k, v in tags.items()}
             }
             json_line = json.dumps(other_data, ensure_ascii=False)
-            async with aiofiles.open(self.file_path.replace('.jsonl', '_other.jsonl'), mode='a', encoding='utf-8') as f:
+            other_path = self.file_path.replace('.jsonl', '_other.jsonl')
+            async with aiofiles.open(other_path, mode='a', encoding='utf-8') as f:
                 await f.write(json_line + "\n")
+            logger.info(f"Successfully saved other data to {other_path}")

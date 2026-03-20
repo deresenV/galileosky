@@ -92,12 +92,15 @@ class GalileoskyListenerAdapter:
                     tags_data = packet_data[3:-2] 
                     buffer = buffer[expected_len:]
                     
+                    logger.debug(f"Starting to parse tags from packet of length {len(tags_data)}")
+                    
                     try:
                         # 1. Парсинг структуры тегов
                         # TagParser ожидает List[int], преобразуем bytes -> list
                         byte_list = list(tags_data)
                         parser = TagParser()
                         parsed_packet: ParsedPacket = parser.parse(byte_list)
+                        logger.debug(f"Parsed {len(parsed_packet.tags)} raw tags from byte list")
                         
                         await self.process_parsed_data(addr, parsed_packet)
                         
@@ -137,11 +140,11 @@ class GalileoskyListenerAdapter:
                 tag_key = tag.tag.tag_hex_str # e.g. "0x10"
                 packet_dict["tags"][tag_key] = decoded_value
                 
-                # if config.DEBUG:
-                #     logger.debug(f"  Tag {tag.tag.tag_hex_str}: {decoded_value}")
+                logger.debug(f"Successfully decoded Tag {tag_key}")
 
             except Exception as e:
                 logger.error(f"Failed to decode tag {tag.tag.tag_hex_str}: {e}")
                 
+        logger.debug(f"Passing packet to storage. Keys present: {list(packet_dict['tags'].keys())}")
         # Сохранение в хранилище
         await self.storage.save(packet_dict)

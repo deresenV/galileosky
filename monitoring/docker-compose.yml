@@ -93,6 +93,8 @@ services:
       - "8000:8000"
     volumes:
       - ../parsed_data.jsonl:/app/parsed_data.jsonl
+      - ../parsed_data_other.jsonl:/app/parsed_data_other.jsonl
+      - ../parsed_data_errors.jsonl:/app/parsed_data_errors.jsonl
       - ../raw_data.log:/app/raw_data.log
     networks:
       - loki
