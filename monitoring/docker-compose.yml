@@ -93,6 +93,7 @@ services:
       - "8000:8000"
     volumes:
       - ../parsed_data.jsonl:/app/parsed_data.jsonl
+      - ../raw_data.log:/app/raw_data.log
     networks:
       - loki
     restart: unless-stopped
