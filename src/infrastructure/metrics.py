@@ -3,7 +3,7 @@ from prometheus_client import Gauge, Counter
 class MercuryMetrics:
     def __init__(self):
         # Labels common to all metrics
-        self.labels = ['imei', 'mercury_id']
+        self.labels = ['imei', 'mercury_id', 'container_id']
 
         # Enters (Inputs)
         self.enter_voltage = Gauge('galileosky_enter_voltage', 'Voltage on inputs', self.labels + ['input_id'])

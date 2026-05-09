@@ -148,11 +148,26 @@ class JsonFileStorage(IStorage):
                                     metrics_data[k] = float(v)
                             except (ValueError, TypeError):
                                 pass
+                    cont_ids = {
+                        "99": "1",
+                        "73": "2",
+                        "22": "3",
+                        "89": "4",
+                        "77": "5",
+                        "95": "6",
+                        "94": "7",
+                        "92": "8",
+                        "27": "9",
+                        "68": "10",
+                        "41": "11",
+                        "02": "13",
+                    }
 
                     metrics.update(
                         imei=metrics_data["imei"],
                         mercury_id=metrics_data["mercury_id"],
-                        data=metrics_data
+                        data=metrics_data,
+                        container_id = cont_ids.get(metrics_data["mercury_id"], "unknown")
                     )
                 except Exception as e:
                     logger.warning(f"Error updating metrics: {e}")
