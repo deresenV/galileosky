@@ -3,7 +3,7 @@ from prometheus_client import Gauge, Counter
 class MercuryMetrics:
     def __init__(self):
         # Labels common to all metrics
-        self.labels = ['imei', 'mercury_id']
+        self.labels = ['imei', 'mercury_id', "container_id"]
 
         # Enters (Inputs)
         self.enter_voltage = Gauge('galileosky_enter_voltage', 'Voltage on inputs', self.labels + ['input_id'])
@@ -38,14 +38,14 @@ class MercuryMetrics:
         # Distortion (Phase 1, 2, 3)
         self.mercury_distortion = Gauge('galileosky_mercury_distortion', 'Harmonic distortion', self.labels + ['phase'])
 
-    def update(self, imei: str, mercury_id: str, data: dict):
+    def update(self, imei: str, mercury_id: str, data: dict, container_id: str):
         """
         Update metrics with data from the parsed packet.
         :param imei: Device IMEI
         :param mercury_id: Mercury meter ID
         :param data: Dictionary with parsed data (similar to what is saved to JSONL)
         """
-        common_labels = {'imei': imei, 'mercury_id': mercury_id}
+        common_labels = {'imei': imei, 'mercury_id': mercury_id, "container_id": container_id}
 
         # Enters
         for i in range(4):

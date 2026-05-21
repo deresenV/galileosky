@@ -60,7 +60,7 @@ services:
   grafana:
     image: grafana/grafana:10.4.1
     ports:
-      - "3000:3000"
+      - "3200:3000"
     volumes:
       - grafana-storage:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning

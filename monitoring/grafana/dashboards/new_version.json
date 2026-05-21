@@ -101,7 +101,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_current{phase=\"1\", imei=\"$imei\"} * 100",
+          "expr": "galileosky_mercury_current{phase=\"1\", imei=\"$imei\", mercury_id=\"$mercury_id\"} * 100",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -181,7 +181,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_current{phase=\"2\", imei=\"$imei\"} * 100",
+          "expr": "galileosky_mercury_current{phase=\"2\", imei=\"$imei\", mercury_id=\"$mercury_id\"} * 100",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -261,7 +261,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_current{phase=\"3\", imei=\"$imei\"} * 100",
+          "expr": "galileosky_mercury_current{phase=\"3\", imei=\"$imei\", mercury_id=\"$mercury_id\"} * 100",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -328,7 +328,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_active_power{phase=\"sum\", imei=\"$imei\"}",
+          "expr": "galileosky_mercury_active_power{phase=\"sum\", imei=\"$imei\", mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -395,7 +395,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_active_energy_fwd{imei=\"$imei\"}",
+          "expr": "galileosky_mercury_active_energy_fwd{imei=\"$imei\", mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -461,8 +461,8 @@
             "uid": "PBFA97CFB590B2093"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "galileosky_mercury_frequency",
+          "editorMode": "code",
+          "expr": "galileosky_mercury_frequency{mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -566,6 +566,42 @@
                 "value": "Фаза С"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*phase=\"2\"/"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Фаза B"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*phase=\"1\"/"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Фаза А"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*phase=\"3\"/"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Фаза C"
+              }
+            ]
           }
         ]
       },
@@ -601,7 +637,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "avg_over_time(galileosky_mercury_current{job=~\"galileosky_listener\", imei=\"$imei\"}[$__rate_interval]) * 100",
+          "expr": "avg_over_time(galileosky_mercury_current{job=~\"galileosky_listener\", imei=\"$imei\", mercury_id=\"$mercury_id\"}[$__rate_interval]) * 100",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -680,6 +716,30 @@
                 "value": "Контейнер №1"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*mercury_id=\"22\"/"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Контейнер №3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*mercury_id=\"73\"//"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Контейнер №2"
+              }
+            ]
           }
         ]
       },
@@ -715,7 +775,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "avg_over_time(max_over_time(galileosky_mercury_active_power{phase=\"sum\", imei=\"$imei\"}[$__rate_interval])[5m:])",
+          "expr": "max_over_time(galileosky_mercury_active_power{phase=\"sum\", imei=\"$imei\", mercury_id=\"$mercury_id\"}[$__rate_interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -782,7 +842,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_voltage{phase=\"1\", imei=\"$imei\"}",
+          "expr": "galileosky_mercury_voltage{phase=\"1\", imei=\"$imei\", mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -850,7 +910,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_voltage{phase=\"2\", imei=\"$imei\"}",
+          "expr": "galileosky_mercury_voltage{phase=\"2\", imei=\"$imei\", mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -918,7 +978,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_voltage{phase=\"3\", imei=\"$imei\"}",
+          "expr": "galileosky_mercury_voltage{phase=\"3\", imei=\"$imei\", mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -997,8 +1057,8 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"3\"}"
+              "id": "byRegexp",
+              "options": "/.*sensor_id=\"3\"/"
             },
             "properties": [
               {
@@ -1039,8 +1099,8 @@
             "uid": "PBFA97CFB590B2093"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "galileosky_temperature{sensor_id=\"3\"}",
+          "editorMode": "code",
+          "expr": "avg_over_time(galileosky_temperature{sensor_id=\"3\", imei=\"$imei\", mercury_id=\"$mercury_id\"}[1m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1119,7 +1179,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"0\"}"
+              "options": "{imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"0\"}"
             },
             "properties": [
               {
@@ -1131,7 +1191,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"1\"}"
+              "options": "{imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"22\", sensor_id=\"1\"}"
             },
             "properties": [
               {
@@ -1143,7 +1203,43 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "{__name__=\"galileosky_temperature\", imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"99\", sensor_id=\"2\"}"
+              "options": "{imei=\"869531073980322\", instance=\"monitoring-listener-1:8000\", job=\"galileosky_listener\", mercury_id=\"22\", sensor_id=\"2\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Фаза Б"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sensor_id=\"1\"/"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Фаза С"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sensor_id=\"0\"/"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Фаза А"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sensor_id=\"2\"/"
             },
             "properties": [
               {
@@ -1184,8 +1280,8 @@
             "uid": "PBFA97CFB590B2093"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "galileosky_temperature{sensor_id=~\"1|0|2\"}",
+          "editorMode": "code",
+          "expr": "avg_over_time(galileosky_temperature{sensor_id=~\"1|0|2\", mercury_id=\"$mercury_id\"}[2m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1199,8 +1295,8 @@
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "Loki"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -1247,11 +1343,14 @@
       "pluginVersion": "10.4.1",
       "targets": [
         {
-          "direction": "backward",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ks1 | __error__=\"\" [5m]))",
+          "expr": "galileosky_mercury_power_factor{phase=\"1\", mercury_id=\"$mercury_id\"}",
           "legendFormat": "__auto",
-          "queryType": "instant",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1260,8 +1359,8 @@
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "Loki"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -1308,10 +1407,13 @@
       "pluginVersion": "10.4.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ks2 | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
+          "expr": "galileosky_mercury_power_factor{phase=\"2\",mercury_id=\"$mercury_id\"}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1320,8 +1422,8 @@
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "Loki"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -1368,11 +1470,13 @@
       "pluginVersion": "10.4.1",
       "targets": [
         {
-          "direction": "backward",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_ks3 | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
+          "expr": "galileosky_mercury_power_factor{phase=\"3\", mercury_id=\"$mercury_id\"}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1381,8 +1485,8 @@
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "Loki"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -1429,10 +1533,13 @@
       "pluginVersion": "10.4.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_a12 | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
+          "expr": "galileosky_mercury_angle{phase_pair=\"1-2\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1441,8 +1548,8 @@
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "Loki"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -1489,10 +1596,13 @@
       "pluginVersion": "10.4.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_a13 | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
+          "expr": "galileosky_mercury_angle{phase_pair=\"1-3\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1501,8 +1611,8 @@
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "Loki"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -1549,10 +1659,13 @@
       "pluginVersion": "10.4.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_a23 | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
+          "expr": "galileosky_mercury_angle{phase_pair=\"2-3\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1561,8 +1674,8 @@
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "Loki"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -1609,10 +1722,13 @@
       "pluginVersion": "10.4.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_kg1 | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
+          "expr": "galileosky_mercury_distortion{phase=\"1\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1621,8 +1737,8 @@
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "Loki"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -1669,10 +1785,13 @@
       "pluginVersion": "10.4.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_kg2 | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
+          "expr": "galileosky_mercury_distortion{phase=\"2\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1681,8 +1800,8 @@
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "Loki"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -1729,10 +1848,13 @@
       "pluginVersion": "10.4.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "editorMode": "code",
-          "expr": "max by (mercury_id, imei) (last_over_time({job=\"mercury_parser\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"} | json | unwrap galileosky_mercury_kg3 | __error__=\"\" [5m]))",
-          "legendFormat": "__auto",
-          "queryType": "instant",
+          "expr": "galileosky_mercury_distortion{phase=\"3\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1772,34 +1894,88 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "99",
-          "value": "99"
+          "selected": true,
+          "text": "Контейнер 13",
+          "value": "2"
         },
-        "datasource": {
-          "type": "loki",
-          "uid": "P8E80F9AEF21F6940"
-        },
-        "definition": "label_values({job=\"mercury_parser\"}, mercury_id)",
         "description": "",
         "hide": 0,
         "includeAll": false,
         "label": "ID счетчика",
         "multi": false,
         "name": "mercury_id",
-        "options": [],
-        "query": "label_values({job=\"mercury_parser\"}, mercury_id)",
-        "refresh": 1,
-        "regex": "",
+        "options": [
+          {
+            "selected": false,
+            "text": "Контейнер 1",
+            "value": "99"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 2",
+            "value": "73"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 3",
+            "value": "22"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 4",
+            "value": "89"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 5",
+            "value": "77"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 6",
+            "value": "95"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 7",
+            "value": "94"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 8",
+            "value": "92"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 9",
+            "value": "27"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 10",
+            "value": "68"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 11",
+            "value": "41"
+          },
+          {
+            "selected": true,
+            "text": "Контейнер 13",
+            "value": "2"
+          }
+        ],
+        "query": "Контейнер 1 : 99, Контейнер 2 : 73, Контейнер 3 : 22, Контейнер 4 : 89, Контейнер 5 : 77, Контейнер 6 : 95,  Контейнер 7 : 94, Контейнер 8 : 92, Контейнер 9 : 27,  Контейнер 10 : 68, Контейнер 11 : 41, Контейнер 13 : 2",
+        "queryValue": "",
         "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
+        "type": "custom"
       }
     ]
   },
   "time": {
-    "from": "2026-02-28T05:35:41.431Z",
-    "to": "2026-02-28T06:23:23.864Z"
+    "from": "now-1h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
