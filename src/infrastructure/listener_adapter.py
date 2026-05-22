@@ -6,9 +6,7 @@ from src.domain.parser import TagParser
 from src.domain.decoders import TagDecoder
 from src.domain.models import ParsedPacket
 from src.config import config
-from src.infrastructure.storage import JsonFileStorage
-import aiofiles
-from datetime import datetime
+from src.infrastructure.storage import MetricsStorage
 
 logger = logging.getLogger(__name__)
 
@@ -22,8 +20,7 @@ class GalileoskyListenerAdapter:
         self.host = host
         self.port = port
         self.server: Optional[asyncio.AbstractServer] = None
-        self.storage = JsonFileStorage() # Инициализация хранилища
-        self.raw_log_path = "raw_data.log" # Файл для сырых данных
+        self.storage = MetricsStorage()
 
     async def start(self):
         """Запуск TCP сервера."""
@@ -31,9 +28,6 @@ class GalileoskyListenerAdapter:
             self.handle_client, self.host, self.port
         )
         addr = self.server.sockets[0].getsockname()
-        logger.info(f"Galileosky Listener started on {addr}")
-        logger.info(f"Data will be saved to {self.storage.file_path}")
-        logger.info(f"Raw data will be logged to {self.raw_log_path}")
         
         async with self.server:
             await self.server.serve_forever()
@@ -73,34 +67,17 @@ class GalileoskyListenerAdapter:
                     
                     if len(buffer) < expected_len:
                         break
-                        
-                    # Извлечение пакета
+
                     packet_data = buffer[:expected_len]
-                    
-                    # Логирование сырых данных
-                    try:
-                        hex_data = packet_data.hex().upper()
-                        timestamp = datetime.now().isoformat()
-                        log_entry = f"{timestamp} | {addr[0]}:{addr[1]} | {hex_data}\n"
-                        
-                        async with aiofiles.open(self.raw_log_path, mode='a') as f:
-                            await f.write(log_entry)
-                    except Exception as e:
-                        logger.error(f"Failed to log raw data: {e}")
 
                     # Данные тегов (без заголовка, длины и CRC)
                     tags_data = packet_data[3:-2] 
                     buffer = buffer[expected_len:]
                     
-                    logger.debug(f"Starting to parse tags from packet of length {len(tags_data)}")
-                    
                     try:
-                        # 1. Парсинг структуры тегов
-                        # TagParser ожидает List[int], преобразуем bytes -> list
                         byte_list = list(tags_data)
                         parser = TagParser()
                         parsed_packet: ParsedPacket = parser.parse(byte_list)
-                        logger.debug(f"Parsed {len(parsed_packet.tags)} raw tags from byte list")
                         
                         await self.process_parsed_data(addr, parsed_packet)
                         
@@ -110,7 +87,6 @@ class GalileoskyListenerAdapter:
                         
                         writer.write(response)
                         await writer.drain()
-                        logger.debug(f"Sent confirmation to {addr}")
                         
                     except Exception as e:
                         logger.error(f"Error processing packet from {addr}: {e}", exc_info=True)
@@ -126,7 +102,6 @@ class GalileoskyListenerAdapter:
         """
         Обработка распарсенных данных (декодирование и логирование/сохранение).
         """
-        logger.info(f"Received packet from {addr} with {len(packet.tags)} tags")
         
         packet_dict = {
             "source_ip": addr[0],
