@@ -1,11 +1,6 @@
-import json
-from math import sqrt
 import logging
-
-import aiofiles
 from datetime import datetime
-from typing import Dict, Any, Optional
-from src.domain.interfaces import IStorage
+from typing import Dict, Any
 from src.domain.mercury import Mercury230Data
 from src.infrastructure.metrics import metrics
 
@@ -121,7 +116,7 @@ def format_mercury_data(mercury_data: Mercury230Data, received_at: str, enters, 
     }
 
 
-class JsonFileStorage(IStorage):
+class MetricsStorage():
     """
     Реализация хранилища, сохраняющая данные в JSON файл (формат JSON Lines).
     """
