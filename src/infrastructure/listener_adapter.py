@@ -114,8 +114,7 @@ class GalileoskyListenerAdapter:
                 decoded_value = TagDecoder.decode(tag.tag.num, tag.data)
                 tag_key = tag.tag.tag_hex_str # e.g. "0x10"
                 packet_dict["tags"][tag_key] = decoded_value
-                
-                logger.debug(f"Successfully decoded Tag {tag_key}")
+
 
             except Exception as e:
                 logger.error(f"Failed to decode tag {tag.tag.tag_hex_str}: {e}")

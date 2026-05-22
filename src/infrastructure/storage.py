@@ -1,48 +1,17 @@
 import logging
 from datetime import datetime
 from typing import Dict, Any
+
+from src.config import config
 from src.domain.mercury import Mercury230Data
 from src.infrastructure.metrics import metrics
 
 logger = logging.getLogger(__name__)
-cont_ids = {
-    "99": "1",
-    "73": "2",
-    "22": "3",
-    "89": "4",
-    "77": "5",
-    "95": "6",
-    "94": "7",
-    "92": "8",
-    "27": "9",
-    "68": "10",
-    "41": "11",
-    "2": "13",
-                    }
-def format_data_without_mercury(received_at: str, enters, temps):
-    return {
-        "enter0": int(enters["enter0"]),
-        "enter1": int(enters["enter1"]),
-        "enter2": int(enters["enter2"]),
-        "enter3": int(enters["enter3"]),
-
-        "galileosky_temp0": temps["temp1"],
-        "galileosky_temp1": temps["temp2"],
-        "galileosky_temp2": temps["temp3"],
-        "galileosky_temp3": temps["temp4"],
-        "galileosky_temp4": temps["temp5"],
-        "galileosky_temp5": temps["temp6"],
-        "galileosky_temp6": temps["temp7"],
-        "galileosky_temp7": temps["temp8"],
-
-        "_received_at": received_at,
-        "imei": "869531073980322"
-    }
 
 def format_mercury_data(mercury_data: Mercury230Data) -> Dict[str, Any]:
     return {
         "mercury_id": str(mercury_data.address),
-        "container_id": cont_ids.get(str(mercury_data.address), "unknown"),
+        "container_id": config.cont_ids.get(str(mercury_data.address), "unknown"),
 
         "galileosky_mercury_state": mercury_data.status,
         "galileosky_mercury_f": mercury_data.frequency,
@@ -110,31 +79,24 @@ class MetricsStorage():
 
     def _get_container_id(self, mercury_id: str) -> Dict[str, str]:
         """Получение номера контейнера из id счетчика"""
-        return {"container_id": cont_ids.get(mercury_id, "unknown")}
+        return {"container_id": config.cont_ids.get(mercury_id, "unknown")}
 
     def _get_received_at(self, received_at: str) -> Dict[str, str]:
         """Время получения данных"""
         return {"_received_at": received_at}
 
     #todo перенести на получение из mercury
-    def _get_imei(self, mercury) -> Dict[str, str]:
+    def _get_imei(self) -> Dict[str, str]:
         return {"imei": "869531073980322"}
-
-    def _build_metrics_data(self, **kwargs) -> Dict[str, Any]:
-        return {
-            **kwargs
-        }
 
     async def save(self, packet_data: Dict[str, Any]):
         received_at = datetime.now().isoformat()
         tags = packet_data.get("tags", {})
-        logger.info(f"Storage save called. Parsed tags: {list(tags.keys())}")
         
         enters = self._get_enters(packet_data)
         temps = self._get_temps(packet_data)
-        imei = {}
-        container_id = {}
-        mercury_data = {}
+        imei = "869531073980322"
+        
         if "0xEA" in tags:
             logger.info("Found 0xEA tag, processing as Mercury data")
             try:
@@ -142,12 +104,12 @@ class MetricsStorage():
                 if not isinstance(mercury_obj, Mercury230Data):
                     raise ValueError(f"Expected Mercury230Data, got {type(mercury_obj)}")
 
-                imei = self._get_imei(mercury_obj)
                 mercury_data = format_mercury_data(mercury_obj)
-                container_id = self._get_container_id(mercury_data["mercury_id"])
+                mercury_id = mercury_data["mercury_id"]
+                container_id_val = mercury_data["container_id"]
                 
                 try:
-                    metrics_data = mercury_data.copy()
+                    metrics_data = {**mercury_data, **enters, **temps, "_received_at": received_at, "imei": imei}
     
                     for k, v in metrics_data.items():
                         if k.startswith("galileosky_") or k.startswith("enter"):
@@ -156,23 +118,22 @@ class MetricsStorage():
                                     metrics_data[k] = float(v)
                             except (ValueError, TypeError):
                                 pass
-                    metrics_data = self._build_metrics_data(**imei, **mercury_data, **container_id, **self._get_received_at(received_at), **enters, **temps)
+                    
                     metrics.update(
-                        imei=metrics_data["imei"],
+                        imei=imei,
                         data=metrics_data,
-                        mercury_id=metrics_data["mercury_id"],
-                        container_id=container_id["container_id"]
+                        mercury_id=mercury_id,
+                        container_id=container_id_val
                     )
-                    logger.info(f"Successfully updated metrics for mercury_id {metrics_data['mercury_id']}")
+                    logger.info(f"Successfully updated metrics for mercury_id {mercury_id}")
                 except Exception as e:
-                    logger.warning(f"Error updating metrics: {e}")
+                    logger.warning(f"Error updating metrics: {e}", exc_info=True)
 
             except Exception as e:
                 logger.error(f"Error processing Mercury data: {e}", exc_info=True)
         else:
-            formatted_data= self._build_metrics_data(**imei, **enters, **temps, **self._get_received_at(received_at))
             try:
-                metrics_data = formatted_data.copy()
+                metrics_data = {**enters, **temps, "_received_at": received_at, "imei": imei}
 
                 for k, v in metrics_data.items():
                     if k.startswith("galileosky_") or k.startswith("enter"):
@@ -183,10 +144,8 @@ class MetricsStorage():
                             pass
 
                 metrics.update(
-                    imei=metrics_data["imei"],
-                    data=metrics_data,
-                    container_id= container_id["container_id"]
+                    imei=imei,
+                    data=metrics_data
                 )
-                logger.info("Successfully updated metrics (without mercury data)")
             except Exception as e:
-                logger.error(f"Error processing without mercury data: {e}")
+                logger.error(f"Error processing without mercury data: {e}", exc_info=True)
