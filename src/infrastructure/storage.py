@@ -6,18 +6,18 @@ from src.infrastructure.metrics import metrics
 
 logger = logging.getLogger(__name__)
 cont_ids = {
-                        "99": "1",
-                        "73": "2",
-                        "22": "3",
-                        "89": "4",
-                        "77": "5",
-                        "95": "6",
-                        "94": "7",
-                        "92": "8",
-                        "27": "9",
-                        "68": "10",
-                        "41": "11",
-                        "2": "13",
+    "99": "1",
+    "73": "2",
+    "22": "3",
+    "89": "4",
+    "77": "5",
+    "95": "6",
+    "94": "7",
+    "92": "8",
+    "27": "9",
+    "68": "10",
+    "41": "11",
+    "2": "13",
                     }
 def format_data_without_mercury(received_at: str, enters, temps):
     return {
@@ -26,7 +26,6 @@ def format_data_without_mercury(received_at: str, enters, temps):
         "enter2": int(enters["enter2"]),
         "enter3": int(enters["enter3"]),
 
-        # Температура
         "galileosky_temp0": temps["temp1"],
         "galileosky_temp1": temps["temp2"],
         "galileosky_temp2": temps["temp3"],
@@ -40,76 +39,36 @@ def format_data_without_mercury(received_at: str, enters, temps):
         "imei": "869531073980322"
     }
 
-def format_mercury_data(mercury_data: Mercury230Data, received_at: str, enters, temps) -> Dict[str, Any]:
-    """
-    Форматирует объект данных в структурированный словарь,
-    совместимый с метриками дашборда (плоская структура для удобства парсинга в Loki).
-    Значения сохраняются в естественных единицах (В, А, Вт, Гц), без дополнительных множителей.
-    """
+def format_mercury_data(mercury_data: Mercury230Data) -> Dict[str, Any]:
     return {
-        "enter0": int(enters["enter0"]),
-        "enter1": int(enters["enter1"]),
-        "enter2": int(enters["enter2"]),
-        "enter3": int(enters["enter3"]),
-
-        # Температура
-        "galileosky_temp0": temps["temp1"],
-        "galileosky_temp1": temps["temp2"],
-        "galileosky_temp2": temps["temp3"],
-        "galileosky_temp3": temps["temp4"],
-        "galileosky_temp4": temps["temp5"],
-        "galileosky_temp5": temps["temp6"],
-        "galileosky_temp6": temps["temp7"],
-        "galileosky_temp7": temps["temp8"],
-
-        "_received_at": received_at,
         "mercury_id": str(mercury_data.address),
-        "imei": "869531073980322",
-        "container_id": cont_ids.get(str(mercury_data.address), "unkown"),
+        "container_id": cont_ids.get(str(mercury_data.address), "unknown"),
 
-        # Статусы
         "galileosky_mercury_state": mercury_data.status,
-
-        # Частота (F)
         "galileosky_mercury_f": mercury_data.frequency,
-
-        # Напряжения (U1, U2, U3)
         "galileosky_mercury_u1": mercury_data.voltage_p1 or 0,
         "galileosky_mercury_u2": mercury_data.voltage_p2 or 0,
         "galileosky_mercury_u3": mercury_data.voltage_p3 or 0,
-
-        # Токи (I1, I2, I3)
         "galileosky_mercury_i1": mercury_data.current_p1,
         "galileosky_mercury_i2": mercury_data.current_p2,
         "galileosky_mercury_i3": mercury_data.current_p3,
-
-        # Углы между фазами (A12, A23, A13)
         "galileosky_mercury_a12": mercury_data.angle_1_2,
         "galileosky_mercury_a23": mercury_data.angle_2_3,
         "galileosky_mercury_a13": mercury_data.angle_1_3,
-
-        # Активная мощность по фазам и сумма (P1, P2, P3, PS)
         "galileosky_mercury_p1": mercury_data.active_power_p1,
         "galileosky_mercury_p2": mercury_data.active_power_p2,
         "galileosky_mercury_p3": mercury_data.active_power_p3,
-        # "galileosky_mercury_ps": mercury_data.active_power_sum,
         "galileosky_mercury_ps": (float(mercury_data.current_p1) * float(mercury_data.voltage_p1) * float(
             mercury_data.power_factor_p1) +
                                   float(mercury_data.current_p2) * float(mercury_data.voltage_p2) * float(
                     mercury_data.power_factor_p2) +
                                   float(mercury_data.current_p3) * float(mercury_data.voltage_p3) * float(
                     mercury_data.power_factor_p3)) * 300 / 1000,
-
-        # Энергия (Active Forward)
         "galileosky_mercury_pa_plus": mercury_data.energy_active_fwd,
-
-        # Коэффициенты мощности (KS1, KS2, KS3, KSS)
         "galileosky_mercury_ks1": mercury_data.power_factor_p1,
         "galileosky_mercury_ks2": mercury_data.power_factor_p2,
         "galileosky_mercury_ks3": mercury_data.power_factor_p3,
         "galileosky_mercury_kss": mercury_data.power_factor_sum,
-
-        # Коэффициенты искажения (KG1, KG2, KG3)
         "galileosky_mercury_kg1": mercury_data.distortion_p1,
         "galileosky_mercury_kg2": mercury_data.distortion_p2,
         "galileosky_mercury_kg3": mercury_data.distortion_p3,
@@ -118,47 +77,64 @@ def format_mercury_data(mercury_data: Mercury230Data, received_at: str, enters, 
 
 class MetricsStorage():
     """
-    Реализация хранилища, сохраняющая данные в JSON файл (формат JSON Lines).
+    Хранилище метрик
     """
+    def _get_temps(self, packet_data: Dict[str, Any]) -> Dict[str, Any]:
+        tags = packet_data.get("tags", {})
+        temps = {
+            "galileosky_temp0": tags.get("0x70", 0),
+            "galileosky_temp1": tags.get("0x71", 0),
+            "galileosky_temp2": tags.get("0x72", 0),
+            "galileosky_temp3": tags.get("0x73", 0),
+            "galileosky_temp4": tags.get("0x74", 0),
+            "galileosky_temp5": tags.get("0x75", 0),
+            "galileosky_temp6": tags.get("0x76", 0),
+            "galileosky_temp7": tags.get("0x77", 0)
+        }
+        for key, val in temps.items():
+            if isinstance(val, dict) and "temperature" in val:
+                temps[key] = val["temperature"] if val["temperature"] is not None else 0
+            elif isinstance(val, dict) and "error" in val:
+                temps[key] = 0
+        return temps
 
-    def __init__(self, file_path: str = "parsed_data.jsonl"):
-        self.file_path = file_path
+    def _get_enters(self, packet_data: Dict[str, Any]) -> Dict[str, Any]:
+        tags = packet_data.get("tags", {})
+        enters = {
+            "enter0": tags.get("0x50", 0),
+            "enter1": tags.get("0x51", 0),
+            "enter2": tags.get("0x52", 0),
+            "enter3": tags.get("0x53", 0)
+        }
+        return enters
+
+    def _get_container_id(self, mercury_id: str) -> Dict[str, str]:
+        """Получение номера контейнера из id счетчика"""
+        return {"container_id": cont_ids.get(mercury_id, "unknown")}
+
+    def _get_received_at(self, received_at: str) -> Dict[str, str]:
+        """Время получения данных"""
+        return {"_received_at": received_at}
+
+    #todo перенести на получение из mercury
+    def _get_imei(self, mercury) -> Dict[str, str]:
+        return {"imei": "869531073980322"}
+
+    def _build_metrics_data(self, **kwargs) -> Dict[str, Any]:
+        return {
+            **kwargs
+        }
 
     async def save(self, packet_data: Dict[str, Any]):
         received_at = datetime.now().isoformat()
         tags = packet_data.get("tags", {})
         logger.info(f"Storage save called. Parsed tags: {list(tags.keys())}")
         
-        
-        enter0 = tags.get("0x50", 0)
-        enter1 = tags.get("0x51", 0)
-        enter2 = tags.get("0x52", 0)
-        enter3 = tags.get("0x53", 0)
-
-        enters_data = {
-            "enter0": enter0,
-            "enter1": enter1,
-            "enter2": enter2,
-            "enter3": enter3,
-            "0x45": tags.get("0x45", 0),
-            "0x46": tags.get("0x46", 0),
-        }
-        temps = {
-            "temp1": tags.get("0x70", 0),
-            "temp2": tags.get("0x71", 0),
-            "temp3": tags.get("0x72", 0),
-            "temp4": tags.get("0x73", 0),
-            "temp5": tags.get("0x74", 0),
-            "temp6": tags.get("0x75", 0),
-            "temp7": tags.get("0x76", 0),
-            "temp8": tags.get("0x77", 0)
-        }
-
-        for key, val in temps.items():
-            if isinstance(val, dict) and "temperature" in val:
-                temps[key] = val["temperature"] if val["temperature"] is not None else 0
-            elif isinstance(val, dict) and "error" in val:
-                temps[key] = 0
+        enters = self._get_enters(packet_data)
+        temps = self._get_temps(packet_data)
+        imei = {}
+        container_id = {}
+        mercury_data = {}
         if "0xEA" in tags:
             logger.info("Found 0xEA tag, processing as Mercury data")
             try:
@@ -166,23 +142,12 @@ class MetricsStorage():
                 if not isinstance(mercury_obj, Mercury230Data):
                     raise ValueError(f"Expected Mercury230Data, got {type(mercury_obj)}")
 
-                formatted_data = format_mercury_data(mercury_obj, received_at, enters_data, temps)
-                cont_ids = {
-                        "99": "1",
-                        "73": "2",
-                        "22": "3",
-                        "89": "4",
-                        "77": "5",
-                        "95": "6",
-                        "94": "7",
-                        "92": "8",
-                        "27": "9",
-                        "68": "10",
-                        "41": "11",
-                        "2": "13",
-                    }
+                imei = self._get_imei(mercury_obj)
+                mercury_data = format_mercury_data(mercury_obj)
+                container_id = self._get_container_id(mercury_data["mercury_id"])
+                
                 try:
-                    metrics_data = formatted_data.copy()
+                    metrics_data = mercury_data.copy()
     
                     for k, v in metrics_data.items():
                         if k.startswith("galileosky_") or k.startswith("enter"):
@@ -191,36 +156,21 @@ class MetricsStorage():
                                     metrics_data[k] = float(v)
                             except (ValueError, TypeError):
                                 pass
-    
+                    metrics_data = self._build_metrics_data(**imei, **mercury_data, **container_id, **self._get_received_at(received_at), **enters, **temps)
                     metrics.update(
                         imei=metrics_data["imei"],
-                        mercury_id=metrics_data["mercury_id"],
                         data=metrics_data,
-                        container_id = cont_ids.get(metrics_data["mercury_id"], "unknown")
+                        mercury_id=metrics_data["mercury_id"],
+                        container_id=container_id["container_id"]
                     )
+                    logger.info(f"Successfully updated metrics for mercury_id {metrics_data['mercury_id']}")
                 except Exception as e:
                     logger.warning(f"Error updating metrics: {e}")
 
-                json_line = json.dumps(formatted_data, ensure_ascii=False)
-                async with aiofiles.open(self.file_path, mode='a', encoding='utf-8') as f:
-                    await f.write(json_line + "\n")
-                logger.info(f"Successfully saved Mercury data to {self.file_path}")
-
             except Exception as e:
                 logger.error(f"Error processing Mercury data: {e}", exc_info=True)
-                error_data = {
-                    "_received_at": datetime.now().isoformat(),
-                    "error": str(e),
-                    "raw_data": str(tags.get("0xEA"))
-                }
-                json_line = json.dumps(error_data, ensure_ascii=False)
-                error_path = self.file_path.replace('.jsonl', '_errors.jsonl')
-                async with aiofiles.open(error_path, mode='a', encoding='utf-8') as f:
-                    await f.write(json_line + "\n")
-                logger.info(f"Saved error data to {error_path}")
         else:
-            formatted_data = format_data_without_mercury(received_at, enters_data, temps)
-            json_line = json.dumps(formatted_data, ensure_ascii=False)
+            formatted_data= self._build_metrics_data(**imei, **enters, **temps, **self._get_received_at(received_at))
             try:
                 metrics_data = formatted_data.copy()
 
@@ -234,9 +184,9 @@ class MetricsStorage():
 
                 metrics.update(
                     imei=metrics_data["imei"],
-                    data=metrics_data
+                    data=metrics_data,
+                    container_id= container_id["container_id"]
                 )
-            except:
-                logger.error("Error processing without mercury data")
-            async with aiofiles.open(self.file_path, mode='a', encoding='utf-8') as f:
-                await f.write(json_line + "\n")
+                logger.info("Successfully updated metrics (without mercury data)")
+            except Exception as e:
+                logger.error(f"Error processing without mercury data: {e}")
