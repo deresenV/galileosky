@@ -4,8 +4,6 @@ networks:
 services:
   prometheus:
     image: prom/prometheus:v2.51.0
-    ports:
-      - "9090:9090"
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
@@ -60,13 +58,12 @@ services:
   victoriametrics:
     image: victoriametrics/victoria-metrics:v1.99.0
     container_name: victoriametrics
-    ports:
-      - "8428:8428"
     volumes:
       - vmdata:/storage
     command:
       - "-storageDataPath=/storage"
       - "-retentionPeriod=90d"
+      - '-search.maxQueryDuration=30s'
     networks:
       - monitoring
     restart: unless-stopped
