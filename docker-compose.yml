@@ -6,6 +6,7 @@ services:
     image: prom/prometheus:v2.51.0
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus/rules.yml:/etc/prometheus/rules.yml
       - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'

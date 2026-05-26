@@ -1,0 +1,15 @@
+groups:
+  - name: mercury_rules
+    interval: 15s
+    rules:
+      - record: galileosky_mercury_active_power
+        labels:
+          mercury_id: "900"
+          phase: "sum"
+        expr: |
+          sum(
+            galileosky_mercury_active_power{
+              phase="sum",
+              mercury_id=~"61|6|128"
+            }
+          )
