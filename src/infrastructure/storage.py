@@ -27,6 +27,7 @@ def format_mercury_data(mercury_data: Mercury230Data) -> Dict[str, Any]:
         "galileosky_mercury_p1": mercury_data.active_power_p1,
         "galileosky_mercury_p2": mercury_data.active_power_p2,
         "galileosky_mercury_p3": mercury_data.active_power_p3,
+        "galileosky_mercury_ps_legacy": mercury_data.active_power_sum,
         "galileosky_mercury_ps": (float(mercury_data.current_p1) * float(mercury_data.voltage_p1) * float(
             mercury_data.power_factor_p1) +
                                   float(mercury_data.current_p2) * float(mercury_data.voltage_p2) * float(

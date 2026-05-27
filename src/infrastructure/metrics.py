@@ -92,7 +92,8 @@ class MercuryMetrics:
             "galileosky_mercury_p1": "1",
             "galileosky_mercury_p2": "2",
             "galileosky_mercury_p3": "3",
-            "galileosky_mercury_ps": "sum"
+            "galileosky_mercury_ps": "sum",
+            "galileosky_mercury_ps_legacy": "legacy_sum"
         }
         for key, phase in power_map.items():
             if key in data:
