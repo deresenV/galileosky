@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 5,
   "links": [],
   "panels": [
     {
@@ -101,7 +102,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_current{phase=\"1\", imei=\"$imei\", mercury_id=\"$mercury_id\"} * 100",
+          "expr": "galileosky_mercury_current{phase=\"1\", mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -181,7 +182,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_current{phase=\"2\", imei=\"$imei\", mercury_id=\"$mercury_id\"} * 100",
+          "expr": "galileosky_mercury_current{phase=\"2\", mercury_id=\"$mercury_id\"} ",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -261,7 +262,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_current{phase=\"3\", imei=\"$imei\", mercury_id=\"$mercury_id\"} * 100",
+          "expr": "galileosky_mercury_current{phase=\"3\", mercury_id=\"$mercury_id\"} ",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -328,7 +329,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_active_power{phase=\"sum\", imei=\"$imei\", mercury_id=\"$mercury_id\"}",
+          "expr": "galileosky_mercury_active_power{phase=\"sum\", mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -395,7 +396,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_active_energy_fwd{imei=\"$imei\", mercury_id=\"$mercury_id\"}",
+          "expr": "galileosky_mercury_active_energy_fwd{ mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -637,7 +638,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "avg_over_time(galileosky_mercury_current{job=~\"galileosky_listener\", imei=\"$imei\", mercury_id=\"$mercury_id\"}[$__rate_interval]) * 100",
+          "expr": "avg_over_time(galileosky_mercury_current{mercury_id=\"$mercury_id\"}[$__rate_interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -775,7 +776,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "max_over_time(galileosky_mercury_active_power{phase=\"sum\", imei=\"$imei\", mercury_id=\"$mercury_id\"}[$__rate_interval])",
+          "expr": "max_over_time(galileosky_mercury_active_power{phase=\"sum\", mercury_id=\"$mercury_id\"}[$__rate_interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -842,7 +843,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_voltage{phase=\"1\", imei=\"$imei\", mercury_id=\"$mercury_id\"}",
+          "expr": "avg_over_time(galileosky_mercury_voltage{phase=\"1\", mercury_id=\"$mercury_id\"} [1m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -910,7 +911,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_voltage{phase=\"2\", imei=\"$imei\", mercury_id=\"$mercury_id\"}",
+          "expr": "galileosky_mercury_voltage{phase=\"2\", mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -978,7 +979,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "galileosky_mercury_voltage{phase=\"3\", imei=\"$imei\", mercury_id=\"$mercury_id\"}",
+          "expr": "galileosky_mercury_voltage{phase=\"3\", mercury_id=\"$mercury_id\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -1100,7 +1101,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "avg_over_time(galileosky_temperature{sensor_id=\"3\", imei=\"$imei\", mercury_id=\"$mercury_id\"}[1m])",
+          "expr": "avg_over_time(galileosky_temperature{sensor_id=\"3\", mercury_id=\"$mercury_id\"}[1m])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1538,7 +1539,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "galileosky_mercury_angle{phase_pair=\"1-2\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "expr": "galileosky_mercury_angle{phase_pair=\"1-2\", mercury_id=~\"$mercury_id\"}",
           "range": true,
           "refId": "A"
         }
@@ -1601,7 +1602,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "galileosky_mercury_angle{phase_pair=\"1-3\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "expr": "galileosky_mercury_angle{phase_pair=\"1-3\", mercury_id=~\"$mercury_id\"}",
           "range": true,
           "refId": "A"
         }
@@ -1664,7 +1665,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "galileosky_mercury_angle{phase_pair=\"2-3\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "expr": "galileosky_mercury_angle{phase_pair=\"2-3\", mercury_id=~\"$mercury_id\"}",
           "range": true,
           "refId": "A"
         }
@@ -1687,8 +1688,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           }
@@ -1727,7 +1727,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "galileosky_mercury_distortion{phase=\"1\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "expr": "galileosky_mercury_distortion{phase=\"1\", mercury_id=~\"$mercury_id\"}",
           "range": true,
           "refId": "A"
         }
@@ -1750,8 +1750,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           }
@@ -1790,7 +1789,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "galileosky_mercury_distortion{phase=\"2\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "expr": "galileosky_mercury_distortion{phase=\"2\", mercury_id=~\"$mercury_id\"}",
           "range": true,
           "refId": "A"
         }
@@ -1813,8 +1812,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           }
@@ -1853,7 +1851,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "galileosky_mercury_distortion{phase=\"3\", mercury_id=~\"$mercury_id\", imei=~\"$imei\"}",
+          "expr": "galileosky_mercury_distortion{phase=\"3\", mercury_id=~\"$mercury_id\"}",
           "range": true,
           "refId": "A"
         }
@@ -1862,7 +1860,7 @@
       "type": "stat"
     }
   ],
-  "refresh": "",
+  "refresh": "10s",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -1894,9 +1892,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": "Контейнер 13",
-          "value": "2"
+          "selected": false,
+          "text": "Контейнер 12.3",
+          "value": "128"
         },
         "description": "",
         "hide": 0,
@@ -1961,12 +1959,32 @@
             "value": "41"
           },
           {
+            "selected": false,
+            "text": "Контейнер 12",
+            "value": "900"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 12.1",
+            "value": "61"
+          },
+          {
+            "selected": false,
+            "text": "Контейнер 12.2",
+            "value": "6"
+          },
+          {
             "selected": true,
+            "text": "Контейнер 12.3",
+            "value": "128"
+          },
+          {
+            "selected": false,
             "text": "Контейнер 13",
             "value": "2"
           }
         ],
-        "query": "Контейнер 1 : 99, Контейнер 2 : 73, Контейнер 3 : 22, Контейнер 4 : 89, Контейнер 5 : 77, Контейнер 6 : 95,  Контейнер 7 : 94, Контейнер 8 : 92, Контейнер 9 : 27,  Контейнер 10 : 68, Контейнер 11 : 41, Контейнер 13 : 2",
+        "query": "Контейнер 1 : 99, Контейнер 2 : 73, Контейнер 3 : 22, Контейнер 4 : 89, Контейнер 5 : 77, Контейнер 6 : 95,  Контейнер 7 : 94, Контейнер 8 : 92, Контейнер 9 : 27,  Контейнер 10 : 68, Контейнер 11 : 41, Контейнер 12 : 900, Контейнер 12.1 : 61, Контейнер 12.2 : 6, Контейнер 12.3 : 128  ,Контейнер 13 : 2",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -1979,8 +1997,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Дашборд",
-  "uid": "mercury-230-loki1",
-  "version": 3,
+  "title": "Дашборд c 12",
+  "uid": "bfn7tkywdolj4b",
+  "version": 8,
   "weekStart": ""
 }
