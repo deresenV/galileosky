@@ -292,3 +292,99 @@ groups:
               mercury_id=~"61|6|128"
             }
           )
+      # Mercury Temperature (Sensors 0..7)
+      - record: galileosky_temperature
+        labels:
+          mercury_id: "900"
+          sensor_id: "0"
+        expr: |
+          avg(
+            galileosky_temperature{
+              sensor_id="0",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_temperature
+        labels:
+          mercury_id: "900"
+          sensor_id: "1"
+        expr: |
+          avg(
+            galileosky_temperature{
+              sensor_id="1",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_temperature
+        labels:
+          mercury_id: "900"
+          sensor_id: "2"
+        expr: |
+          avg(
+            galileosky_temperature{
+              sensor_id="2",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_temperature
+        labels:
+          mercury_id: "900"
+          sensor_id: "3"
+        expr: |
+          avg(
+            galileosky_temperature{
+              sensor_id="3",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_temperature
+        labels:
+          mercury_id: "900"
+          sensor_id: "4"
+        expr: |
+          avg(
+            galileosky_temperature{
+              sensor_id="4",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_temperature
+        labels:
+          mercury_id: "900"
+          sensor_id: "5"
+        expr: |
+          avg(
+            galileosky_temperature{
+              sensor_id="5",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_temperature
+        labels:
+          mercury_id: "900"
+          sensor_id: "6"
+        expr: |
+          avg(
+            galileosky_temperature{
+              sensor_id="6",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_temperature
+        labels:
+          mercury_id: "900"
+          sensor_id: "7"
+        expr: |
+          avg(
+            galileosky_temperature{
+              sensor_id="7",
+              mercury_id=~"61|6|128"
+            }
+          )
