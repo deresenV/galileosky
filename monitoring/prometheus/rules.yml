@@ -2,6 +2,176 @@ groups:
   - name: mercury_rules
     interval: 15s
     rules:
+      # Mercury Status
+      - record: galileosky_mercury_status
+        labels:
+          mercury_id: "900"
+        expr: |
+          sum(
+            galileosky_mercury_status{
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      # Mercury Frequency
+      - record: galileosky_mercury_frequency
+        labels:
+          mercury_id: "900"
+        expr: |
+          avg(
+            galileosky_mercury_frequency{
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      # Mercury Voltage (Phase 1, 2, 3)
+      - record: galileosky_mercury_voltage
+        labels:
+          mercury_id: "900"
+          phase: "1"
+        expr: |
+          avg(
+            galileosky_mercury_voltage{
+              phase="1",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_voltage
+        labels:
+          mercury_id: "900"
+          phase: "2"
+        expr: |
+          avg(
+            galileosky_mercury_voltage{
+              phase="2",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_voltage
+        labels:
+          mercury_id: "900"
+          phase: "3"
+        expr: |
+          avg(
+            galileosky_mercury_voltage{
+              phase="3",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      # Mercury Current (Phase 1, 2, 3)
+      - record: galileosky_mercury_current
+        labels:
+          mercury_id: "900"
+          phase: "1"
+        expr: |
+          sum(
+            galileosky_mercury_current{
+              phase="1",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_current
+        labels:
+          mercury_id: "900"
+          phase: "2"
+        expr: |
+          sum(
+            galileosky_mercury_current{
+              phase="2",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_current
+        labels:
+          mercury_id: "900"
+          phase: "3"
+        expr: |
+          sum(
+            galileosky_mercury_current{
+              phase="3",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      # Mercury Angle (Phase pairs)
+      - record: galileosky_mercury_angle
+        labels:
+          mercury_id: "900"
+          phase_pair: "1-2"
+        expr: |
+          avg(
+            galileosky_mercury_angle{
+              phase_pair="1-2",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_angle
+        labels:
+          mercury_id: "900"
+          phase_pair: "2-3"
+        expr: |
+          avg(
+            galileosky_mercury_angle{
+              phase_pair="2-3",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_angle
+        labels:
+          mercury_id: "900"
+          phase_pair: "1-3"
+        expr: |
+          avg(
+            galileosky_mercury_angle{
+              phase_pair="1-3",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      # Mercury Active Power (Phase 1, 2, 3, Sum)
+      - record: galileosky_mercury_active_power
+        labels:
+          mercury_id: "900"
+          phase: "1"
+        expr: |
+          sum(
+            galileosky_mercury_active_power{
+              phase="1",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_active_power
+        labels:
+          mercury_id: "900"
+          phase: "2"
+        expr: |
+          sum(
+            galileosky_mercury_active_power{
+              phase="2",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_active_power
+        labels:
+          mercury_id: "900"
+          phase: "3"
+        expr: |
+          sum(
+            galileosky_mercury_active_power{
+              phase="3",
+              mercury_id=~"61|6|128"
+            }
+          )
+
       - record: galileosky_mercury_active_power
         labels:
           mercury_id: "900"
@@ -10,6 +180,115 @@ groups:
           sum(
             galileosky_mercury_active_power{
               phase="sum",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_active_power
+        labels:
+          mercury_id: "900"
+          phase: "legacy_sum"
+        expr: |
+          sum(
+            galileosky_mercury_active_power{
+              phase="legacy_sum",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      # Mercury Active Energy Forward
+      - record: galileosky_mercury_active_energy_fwd
+        labels:
+          mercury_id: "900"
+        expr: |
+          sum(
+            galileosky_mercury_active_energy_fwd{
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      # Mercury Power Factor (Phase 1, 2, 3, Sum)
+      - record: galileosky_mercury_power_factor
+        labels:
+          mercury_id: "900"
+          phase: "1"
+        expr: |
+          avg(
+            galileosky_mercury_power_factor{
+              phase="1",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_power_factor
+        labels:
+          mercury_id: "900"
+          phase: "2"
+        expr: |
+          avg(
+            galileosky_mercury_power_factor{
+              phase="2",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_power_factor
+        labels:
+          mercury_id: "900"
+          phase: "3"
+        expr: |
+          avg(
+            galileosky_mercury_power_factor{
+              phase="3",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_power_factor
+        labels:
+          mercury_id: "900"
+          phase: "sum"
+        expr: |
+          avg(
+            galileosky_mercury_power_factor{
+              phase="sum",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      # Mercury Distortion (Phase 1, 2, 3)
+      - record: galileosky_mercury_distortion
+        labels:
+          mercury_id: "900"
+          phase: "1"
+        expr: |
+          avg(
+            galileosky_mercury_distortion{
+              phase="1",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_distortion
+        labels:
+          mercury_id: "900"
+          phase: "2"
+        expr: |
+          avg(
+            galileosky_mercury_distortion{
+              phase="2",
+              mercury_id=~"61|6|128"
+            }
+          )
+
+      - record: galileosky_mercury_distortion
+        labels:
+          mercury_id: "900"
+          phase: "3"
+        expr: |
+          avg(
+            galileosky_mercury_distortion{
+              phase="3",
               mercury_id=~"61|6|128"
             }
           )

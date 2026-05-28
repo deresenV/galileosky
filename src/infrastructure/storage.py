@@ -12,15 +12,15 @@ def format_mercury_data(mercury_data: Mercury230Data) -> Dict[str, Any]:
     return {
         "mercury_id": str(mercury_data.address),
         "container_id": config.cont_ids.get(str(mercury_data.address), "unknown"),
-
+        "galileosky_mercury_coefficient": config.cont_coefficient.get(str(mercury_data.address), 300),
         "galileosky_mercury_state": mercury_data.status,
         "galileosky_mercury_f": mercury_data.frequency,
         "galileosky_mercury_u1": mercury_data.voltage_p1 or 0,
         "galileosky_mercury_u2": mercury_data.voltage_p2 or 0,
         "galileosky_mercury_u3": mercury_data.voltage_p3 or 0,
-        "galileosky_mercury_i1": mercury_data.current_p1,
-        "galileosky_mercury_i2": mercury_data.current_p2,
-        "galileosky_mercury_i3": mercury_data.current_p3,
+        "galileosky_mercury_i1": float(mercury_data.current_p1) * float(config.cont_coefficient.get(str(mercury_data.address), 300)),
+        "galileosky_mercury_i2": float(mercury_data.current_p2) * float(config.cont_coefficient.get(str(mercury_data.address), 300)),
+        "galileosky_mercury_i3": float(mercury_data.current_p3) * float(config.cont_coefficient.get(str(mercury_data.address), 300)),
         "galileosky_mercury_a12": mercury_data.angle_1_2,
         "galileosky_mercury_a23": mercury_data.angle_2_3,
         "galileosky_mercury_a13": mercury_data.angle_1_3,
@@ -33,7 +33,7 @@ def format_mercury_data(mercury_data: Mercury230Data) -> Dict[str, Any]:
                                   float(mercury_data.current_p2) * float(mercury_data.voltage_p2) * float(
                     mercury_data.power_factor_p2) +
                                   float(mercury_data.current_p3) * float(mercury_data.voltage_p3) * float(
-                    mercury_data.power_factor_p3)) * 300 / 1000,
+                    mercury_data.power_factor_p3)) / 1000 * float(config.cont_coefficient.get(str(mercury_data.address), 300)),
         "galileosky_mercury_pa_plus": mercury_data.energy_active_fwd,
         "galileosky_mercury_ks1": mercury_data.power_factor_p1,
         "galileosky_mercury_ks2": mercury_data.power_factor_p2,
