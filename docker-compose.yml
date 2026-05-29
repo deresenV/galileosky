@@ -58,6 +58,8 @@ services:
 
   victoriametrics:
     image: victoriametrics/victoria-metrics:v1.99.0
+    ports:
+      - "9090:8428"
     container_name: victoriametrics
     volumes:
       - vmdata:/storage

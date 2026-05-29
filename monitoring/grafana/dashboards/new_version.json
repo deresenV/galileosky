@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
   "links": [],
   "panels": [
     {
@@ -483,7 +482,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisBorderShow": false,
@@ -494,7 +493,7 @@
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
-            "gradientMode": "none",
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -541,6 +540,22 @@
               {
                 "id": "displayName",
                 "value": "Фаза А"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0
+                    }
+                  ]
+                }
               }
             ]
           },
@@ -553,6 +568,18 @@
               {
                 "id": "displayName",
                 "value": "Фаза В"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
               }
             ]
           },
@@ -565,6 +592,22 @@
               {
                 "id": "displayName",
                 "value": "Фаза С"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0
+                    }
+                  ]
+                }
               }
             ]
           },
@@ -577,6 +620,18 @@
               {
                 "id": "displayName",
                 "value": "Фаза B"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
               }
             ]
           },
@@ -589,6 +644,22 @@
               {
                 "id": "displayName",
                 "value": "Фаза А"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0
+                    }
+                  ]
+                }
               }
             ]
           },
@@ -601,6 +672,22 @@
               {
                 "id": "displayName",
                 "value": "Фаза C"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -694,6 +781,7 @@
             }
           },
           "decimals": 2,
+          "displayName": "Счетчик $mercury_id",
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -1499,8 +1587,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           }
@@ -1562,8 +1649,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           }
@@ -1625,8 +1711,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           }
@@ -1867,34 +1952,9 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "869531073980322",
-          "value": "869531073980322"
-        },
-        "datasource": {
-          "type": "loki",
-          "uid": "P8E80F9AEF21F6940"
-        },
-        "definition": "label_values({job=\"mercury_parser\"}, imei)",
-        "description": "",
-        "hide": 0,
-        "includeAll": false,
-        "label": "IMEI",
-        "multi": false,
-        "name": "imei",
-        "options": [],
-        "query": "label_values({job=\"mercury_parser\"}, imei)",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "current": {
-          "selected": false,
+          "selected": true,
           "text": "Контейнер 12.3",
-          "value": "128"
+          "value": "6"
         },
         "description": "",
         "hide": 0,
@@ -1966,17 +2026,17 @@
           {
             "selected": false,
             "text": "Контейнер 12.1",
-            "value": "61"
+            "value": "128"
           },
           {
             "selected": false,
             "text": "Контейнер 12.2",
-            "value": "6"
+            "value": "61"
           },
           {
             "selected": true,
             "text": "Контейнер 12.3",
-            "value": "128"
+            "value": "6"
           },
           {
             "selected": false,
@@ -1984,7 +2044,7 @@
             "value": "2"
           }
         ],
-        "query": "Контейнер 1 : 99, Контейнер 2 : 73, Контейнер 3 : 22, Контейнер 4 : 89, Контейнер 5 : 77, Контейнер 6 : 95,  Контейнер 7 : 94, Контейнер 8 : 92, Контейнер 9 : 27,  Контейнер 10 : 68, Контейнер 11 : 41, Контейнер 12 : 900, Контейнер 12.1 : 61, Контейнер 12.2 : 6, Контейнер 12.3 : 128  ,Контейнер 13 : 2",
+        "query": "Контейнер 1 : 99, Контейнер 2 : 73, Контейнер 3 : 22, Контейнер 4 : 89, Контейнер 5 : 77, Контейнер 6 : 95,  Контейнер 7 : 94, Контейнер 8 : 92, Контейнер 9 : 27,  Контейнер 10 : 68, Контейнер 11 : 41, Контейнер 12 : 900, Контейнер 12.1 : 128  ,Контейнер 12.2 : 61, Контейнер 12.3 : 6, Контейнер 13 : 2",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -1992,13 +2052,13 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Дашборд c 12",
+  "title": "Дашборд",
   "uid": "bfn7tkywdolj4b",
-  "version": 8,
+  "version": 3,
   "weekStart": ""
 }
