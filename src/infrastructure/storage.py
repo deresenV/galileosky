@@ -29,11 +29,11 @@ def format_mercury_data(mercury_data: Mercury230Data) -> Dict[str, Any]:
         "galileosky_mercury_p3": mercury_data.active_power_p3,
         "galileosky_mercury_ps_legacy": mercury_data.active_power_sum,
         "galileosky_mercury_ps": (float(mercury_data.current_p1) * float(mercury_data.voltage_p1) * float(
-            0.99) +
+            mercury_data.power_factor_p1) +
                                   float(mercury_data.current_p2) * float(mercury_data.voltage_p2) * float(
-                    0.99) +
+                    mercury_data.power_factor_p2) +
                                   float(mercury_data.current_p3) * float(mercury_data.voltage_p3) * float(
-                    0.99)) / 1000 * float(config.cont_coefficient.get(str(mercury_data.address), 300)),
+                    mercury_data.power_factor_p3)) / 1000 * float(config.cont_coefficient.get(str(mercury_data.address), 300)),
         "galileosky_mercury_pa_plus": mercury_data.energy_active_fwd,
         "galileosky_mercury_ks1": mercury_data.power_factor_p1,
         "galileosky_mercury_ks2": mercury_data.power_factor_p2,
