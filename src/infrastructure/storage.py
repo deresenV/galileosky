@@ -1,3 +1,4 @@
+import json
 import logging
 from datetime import datetime
 from typing import Dict, Any
@@ -7,6 +8,18 @@ from src.domain.mercury import Mercury230Data
 from src.infrastructure.metrics import metrics
 
 logger = logging.getLogger(__name__)
+
+
+def log_parsed_data(data: Dict[str, Any]) -> None:
+    """
+    Записать полностью распарсенные из тегов данные в файл (JSONL).
+    Каждое сообщение — отдельная строка JSON. Пишется в дополнение к метрикам.
+    """
+    try:
+        with open(config.PARSED_DATA_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(data, ensure_ascii=False, default=str) + "\n")
+    except Exception as e:
+        logger.warning(f"Failed to write parsed data to {config.PARSED_DATA_FILE}: {e}")
 
 def format_mercury_data(mercury_data: Mercury230Data) -> Dict[str, Any]:
     return {
@@ -111,7 +124,7 @@ class MetricsStorage():
                 
                 try:
                     metrics_data = {**mercury_data, **enters, **temps, "_received_at": received_at, "imei": imei}
-    
+
                     for k, v in metrics_data.items():
                         if k.startswith("galileosky_") or k.startswith("enter"):
                             try:
@@ -119,7 +132,9 @@ class MetricsStorage():
                                     metrics_data[k] = float(v)
                             except (ValueError, TypeError):
                                 pass
-                    
+
+                    log_parsed_data(metrics_data)
+
                     metrics.update(
                         imei=imei,
                         data=metrics_data,
@@ -143,6 +158,8 @@ class MetricsStorage():
                                 metrics_data[k] = float(v)
                         except (ValueError, TypeError):
                             pass
+
+                log_parsed_data(metrics_data)
 
                 metrics.update(
                     imei=imei,

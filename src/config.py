@@ -7,6 +7,8 @@ class Config:
     PORT: int = int(os.getenv("GALILEOSKY_PORT", 12347))
     TIMEOUT: int = int(os.getenv("GALILEOSKY_TIMEOUT", 60))
     DEBUG: bool = os.getenv("DEBUG", "True").lower() == "true"
+    # Файл (JSONL), куда полностью пишутся распарсенные из тегов данные
+    PARSED_DATA_FILE: str = os.getenv("PARSED_DATA_FILE", "parsed_data.jsonl")
     cont_ids = {
         "99": "1",
         "73": "2",
