@@ -1,3 +1,4 @@
+import dataclasses
 import json
 import logging
 from datetime import datetime
@@ -10,14 +11,36 @@ from src.infrastructure.metrics import metrics
 logger = logging.getLogger(__name__)
 
 
-def log_parsed_data(data: Dict[str, Any]) -> None:
+def _to_serializable(value: Any) -> Any:
     """
-    Записать полностью распарсенные из тегов данные в файл (JSONL).
-    Каждое сообщение — отдельная строка JSON. Пишется в дополнение к метрикам.
+    Рекурсивно приводит распарсенное значение тега к JSON-сериализуемому виду.
+    В частности разворачивает dataclass'ы (например 0xEA -> Mercury230Data) в dict
+    со всеми полями.
+    """
+    if dataclasses.is_dataclass(value) and not isinstance(value, type):
+        return dataclasses.asdict(value)
+    if isinstance(value, dict):
+        return {k: _to_serializable(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_to_serializable(v) for v in value]
+    return value
+
+
+def log_parsed_data(packet_data: Dict[str, Any]) -> None:
+    """
+    Записать распарсенные из тегов данные (как пришли от датчика) в файл (JSONL).
+    Каждое сообщение — отдельная строка JSON: все теги, включая 0xEA (Mercury230Data)
+    со всеми полями. Пишется в дополнение к метрикам.
     """
     try:
+        record = {
+            "_received_at": datetime.now().isoformat(),
+            "source_ip": packet_data.get("source_ip"),
+            "source_port": packet_data.get("source_port"),
+            "tags": _to_serializable(packet_data.get("tags", {})),
+        }
         with open(config.PARSED_DATA_FILE, "a", encoding="utf-8") as f:
-            f.write(json.dumps(data, ensure_ascii=False, default=str) + "\n")
+            f.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
     except Exception as e:
         logger.warning(f"Failed to write parsed data to {config.PARSED_DATA_FILE}: {e}")
 
@@ -106,11 +129,15 @@ class MetricsStorage():
     async def save(self, packet_data: Dict[str, Any]):
         received_at = datetime.now().isoformat()
         tags = packet_data.get("tags", {})
-        
+
+        # Сохраняем сами распарсенные теги (как пришли от датчика), включая
+        # 0xEA со всеми полями, в файл — в дополнение к метрикам.
+        log_parsed_data(packet_data)
+
         enters = self._get_enters(packet_data)
         temps = self._get_temps(packet_data)
         imei = "869531073980322"
-        
+
         if "0xEA" in tags:
             logger.info("Found 0xEA tag, processing as Mercury data")
             try:
@@ -132,8 +159,6 @@ class MetricsStorage():
                                     metrics_data[k] = float(v)
                             except (ValueError, TypeError):
                                 pass
-
-                    log_parsed_data(metrics_data)
 
                     metrics.update(
                         imei=imei,
@@ -158,8 +183,6 @@ class MetricsStorage():
                                 metrics_data[k] = float(v)
                         except (ValueError, TypeError):
                             pass
-
-                log_parsed_data(metrics_data)
 
                 metrics.update(
                     imei=imei,
