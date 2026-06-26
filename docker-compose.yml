@@ -52,6 +52,10 @@ services:
     ports:
       - "12347:12347"
       - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PARSED_DATA_FILE=/app/data/parsed_data.jsonl 
     networks:
       - monitoring
     restart: unless-stopped
