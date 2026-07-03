@@ -38,6 +38,31 @@ class MercuryMetrics:
         # Distortion (Phase 1, 2, 3)
         self.mercury_distortion = Gauge('galileosky_mercury_distortion', 'Harmonic distortion', self.labels + ['phase'])
 
+        # Modbus (расширенные теги 0xFE): значение порта с привязкой к container_id
+        self.modbus = Gauge('galileosky_modbus', 'Modbus port value', ['imei', 'container_id', 'modbus'])
+        # Последний набор label'ов по каждому порту — чтобы убирать устаревшую
+        # серию при смене container_id на лету (без перезапуска сервиса).
+        self._modbus_last_labels: dict = {}
+
+    def update_modbus(self, imei: str, modbus_id: str, container_id: str, value: float):
+        """
+        Обновить метрику Modbus-порта.
+        :param modbus_id: номер порта (например "0" для modbus0)
+        :param container_id: номер контейнера из карты привязки
+        :param value: значение порта (уже поделённое на 100 в декодере)
+        """
+        labels = (imei, container_id, modbus_id)  # порядок: imei, container_id, modbus
+        prev = self._modbus_last_labels.get(modbus_id)
+        if prev is not None and prev != labels:
+            # container_id порта поменяли на лету — удаляем старую серию,
+            # чтобы в метриках не висело устаревшее значение под прежним контейнером
+            try:
+                self.modbus.remove(*prev)
+            except KeyError:
+                pass
+        self.modbus.labels(*labels).set(value)
+        self._modbus_last_labels[modbus_id] = labels
+
     def update(self, imei: str, data: dict, mercury_id: str = "none", container_id: str = "unknown"):
         """
         Update metrics with data from the parsed packet.

@@ -7,6 +7,7 @@ from typing import Dict, Any
 from src.config import config
 from src.domain.mercury import Mercury230Data
 from src.infrastructure.metrics import metrics
+from src.infrastructure.modbus_containers import modbus_containers
 
 logger = logging.getLogger(__name__)
 
@@ -126,6 +127,29 @@ class MetricsStorage():
     def _get_imei(self) -> Dict[str, str]:
         return {"imei": "869531073980322"}
 
+    def _update_modbus_metrics(self, tags: Dict[str, Any], imei: str) -> None:
+        """
+        Выгрузить значения Modbus-портов (из расширенных тегов 0xFE) в метрики,
+        проставив container_id по карте привязки (перечитывается на лету).
+        """
+        ext = tags.get("0xFE")
+        if not isinstance(ext, dict):
+            return
+        for key, value in ext.items():
+            if not key.startswith("modbus") or not isinstance(value, (int, float)):
+                continue
+            modbus_id = key[len("modbus"):]
+            container_id = modbus_containers.get_container_id(key)
+            try:
+                metrics.update_modbus(
+                    imei=imei,
+                    modbus_id=modbus_id,
+                    container_id=container_id,
+                    value=value,
+                )
+            except Exception as e:
+                logger.warning(f"Error updating modbus metric {key}: {e}", exc_info=True)
+
     async def save(self, packet_data: Dict[str, Any]):
         received_at = datetime.now().isoformat()
         tags = packet_data.get("tags", {})
@@ -137,6 +161,9 @@ class MetricsStorage():
         enters = self._get_enters(packet_data)
         temps = self._get_temps(packet_data)
         imei = "869531073980322"
+
+        # Modbus-порты (0xFE) -> метрики с container_id из карты привязки
+        self._update_modbus_metrics(tags, imei)
 
         if "0xEA" in tags:
             logger.info("Found 0xEA tag, processing as Mercury data")

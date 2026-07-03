@@ -9,6 +9,11 @@ class Config:
     DEBUG: bool = os.getenv("DEBUG", "True").lower() == "true"
     # Файл (JSONL), куда полностью пишутся распарсенные из тегов данные
     PARSED_DATA_FILE: str = os.getenv("PARSED_DATA_FILE", "parsed_data.jsonl")
+    # Файл (JSON) с привязкой Modbus-порт -> container_id.
+    # Перечитывается на лету, можно менять без перезапуска сервиса.
+    MODBUS_CONTAINERS_FILE: str = os.getenv("MODBUS_CONTAINERS_FILE", "modbus_containers.json")
+    # Кол-во Modbus-портов (modbus0..modbusN-1), под которые инициализируется файл
+    MODBUS_PORTS: int = int(os.getenv("MODBUS_PORTS", 64))
     cont_ids = {
         "99": "1",
         "73": "2",

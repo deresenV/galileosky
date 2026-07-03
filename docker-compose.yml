@@ -54,8 +54,11 @@ services:
       - "8000:8000"
     volumes:
       - ./data:/app/data
+      # Привязка Modbus-порт -> container_id. Монтируем с хоста, чтобы правки
+      # были видны в контейнере на лету и переживали пересоздание.
+      - ./modbus_containers.json:/app/modbus_containers.json
     environment:
-      - PARSED_DATA_FILE=/app/data/parsed_data.jsonl 
+      - PARSED_DATA_FILE=/app/data/parsed_data.jsonl
     networks:
       - monitoring
     restart: unless-stopped
