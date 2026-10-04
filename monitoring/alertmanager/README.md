@@ -35,7 +35,7 @@ not detect a meter that stops sending packets while the exporter remains healthy
 
 `GalileoskyTotalPowerHigh` fires when
 `sum(galileosky_mercury_active_power{phase="sum", container_id!="12"}) >= 200`
-for one continuous minute. It excludes container 12 and uses the metric's raw
+for two continuous minutes. It excludes container 12 and uses the metric's raw
 units without conversion. It recovers when the sum drops below 200. The rule
 runs around the clock; no weekday/time schedule is currently applied.
 Missing measurements are not proof that power has returned to normal; meter

@@ -11,7 +11,7 @@ groups:
           summary: "Galileosky exporter is unavailable"
           description: "Prometheus cannot scrape {{ $labels.instance }} for at least one minute."
       - alert: GalileoskyTotalPowerHigh
-        expr: sum(galileosky_mercury_acti]ve_power{phase="sum", container_id!="12"}) >= 200
+        expr: sum(galileosky_mercury_active_power{phase="sum", container_id!="12"}) >= 200
         for: 2m
         labels:
           severity: warning
