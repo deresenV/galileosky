@@ -84,3 +84,49 @@ rm /tmp/galileosky-alertmanager-smoke.yml /tmp/galileosky-alertmanager-override.
 Notifications may later be restricted to Monday-Friday, 07:00-21:00 with an
 Alertmanager time interval in `Europe/Moscow`. This limits delivery only;
 limiting rule evaluation itself requires a schedule condition in the rule.
+
+## Deliver webhooks to extend_asics
+
+Generate the URL and a reusable shared token (the script does not print it):
+
+```sh
+python3 monitoring/alertmanager/configure_webhook.py
+```
+
+By default the backend is on the same host, listening on 8020. For another host:
+
+```sh
+python3 monitoring/alertmanager/configure_webhook.py --url https://BACKEND_HOST/api/notifications/alertmanager
+```
+
+The ignored `secrets` directory contains `webhook_url`, `webhook_token`, and
+`backend-webhook.env`. Copy the env assignment into `extend_asics/backend/.env`
+and recreate its backend container to apply the environment and create the new
+table. Keep any `ALERTMANAGER_WEBHOOK_TOKEN_FILE` setting empty unless deliberately
+using a mounted file instead of the environment token. Only then enable delivery:
+
+```sh
+docker compose -f docker-compose.yml -f docker-compose.webhooks.yml config --quiet
+docker compose -f docker-compose.yml -f docker-compose.webhooks.yml run --rm --no-deps --entrypoint amtool alertmanager check-config /etc/alertmanager/alertmanager.yml
+docker compose -f docker-compose.yml -f docker-compose.webhooks.yml up -d --no-deps --force-recreate alertmanager
+docker compose restart prometheus
+```
+
+Use both Compose files for later Alertmanager updates. The override replaces the
+local receiver with `extend-asics`, enables `send_resolved`, and adds
+`host.docker.internal:host-gateway` for same-host delivery on Ubuntu.
+
+The URL and token files must be readable by Alertmanager's container user
+(`nobody`); the helper uses 0644 for these bind-mounted files. Restrict access to
+the host directory as appropriate for your deployment. The backend env snippet
+is 0600 and is never committed. The helper reuses the existing token on reruns.
+
+The webhook contains individual `firing` and `resolved` alerts. The power rule
+also supplies `annotations.current_value` and `annotations.threshold` in raw
+metric units. Backend consumers can read `/api/notifications/` with their normal
+JWT and `stats_access` permission; `?status=firing` filters active occurrences.
+
+Delivery errors appear in `docker compose logs alertmanager`. Ingestion returns
+503 if the backend token is not configured and 401 for a wrong token. Resolve
+these settings before expecting notifications. See the backend's
+`backend/ALERTMANAGER_WEBHOOK.md` for its API and deployment instructions.

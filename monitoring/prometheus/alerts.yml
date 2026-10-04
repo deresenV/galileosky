@@ -16,5 +16,7 @@ groups:
         labels:
           severity: warning
         annotations:
+          current_value: "{{ $value }}"
+          threshold: "200"
           summary: "Суммарная мощность достигла порога 200"
           description: "Сумма мощности всех контейнеров, составляет {{ $value }} (порог >= 200) в течение минимум двух минут."

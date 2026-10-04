@@ -1,0 +1,7 @@
+services:
+  alertmanager:
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.webhooks.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./monitoring/alertmanager/secrets:/etc/alertmanager/secrets:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
