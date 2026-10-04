@@ -27,15 +27,19 @@ The `local` receiver intentionally has no delivery integrations. Alerts appear
 in the UI, but no webhook, email or Telegram message is sent. Replace or extend
 this receiver when a real destination is available. Never put credentials in Git.
 
-## Initial rule
+## Alert rules
 
 `GalileoskyListenerDown` fires after the listener's scrape endpoint has been
 unavailable for one minute. It recovers once scraping succeeds again. It does
 not detect a meter that stops sending packets while the exporter remains healthy.
 
-The 200 kW power rule is not enabled yet: first confirm metric units, the set
-of meters included in the total, and measurement freshness. For container 12,
-include either its individual meters or its aggregate, never both.
+`GalileoskyTotalPowerHigh` fires when
+`sum(galileosky_mercury_active_power{phase="sum", container_id!="12"}) >= 200`
+for one continuous minute. It excludes container 12 and uses the metric's raw
+units without conversion. It recovers when the sum drops below 200. The rule
+runs around the clock; no weekday/time schedule is currently applied.
+Missing measurements are not proof that power has returned to normal; meter
+freshness monitoring requires a separate rule and last-measurement timestamps.
 
 ## End-to-end smoke test
 

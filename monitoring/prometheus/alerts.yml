@@ -16,3 +16,11 @@ groups:
           severity: info
         annotations:
           summary: "Тест подключения Alertmanager"
+      - alert: GalileoskyTotalPowerHigh
+        expr: sum(galileosky_mercury_active_power{phase="sum", container_id!="12"}) >= 200
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Суммарная мощность достигла порога 200"
+          description: "Сумма мощности всех контейнеров, кроме 12, составляет {{ $value }} (порог >= 200) в течение минимум одной минуты."
