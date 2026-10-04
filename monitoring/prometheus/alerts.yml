@@ -10,3 +10,9 @@ groups:
         annotations:
           summary: "Galileosky exporter is unavailable"
           description: "Prometheus cannot scrape {{ $labels.instance }} for at least one minute."
+      - alert: AlertmanagerSmokeTest
+        expr: vector(1)
+        labels:
+          severity: info
+        annotations:
+          summary: "Тест подключения Alertmanager"
