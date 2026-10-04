@@ -1,0 +1,12 @@
+groups:
+  - name: galileosky_alerts
+    interval: 15s
+    rules:
+      - alert: GalileoskyListenerDown
+        expr: up{job="galileosky_listener"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Galileosky exporter is unavailable"
+          description: "Prometheus cannot scrape {{ $labels.instance }} for at least one minute."

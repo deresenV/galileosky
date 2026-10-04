@@ -1,0 +1,14 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: local
+  group_by: [alertname, container_id]
+  group_wait: 10s
+  group_interval: 5m
+  repeat_interval: 30m
+
+# Active alerts are visible in the UI. Add a webhook receiver when the
+# application's notification endpoint is available.
+receivers:
+  - name: local
